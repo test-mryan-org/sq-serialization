@@ -3,8 +3,8 @@
 		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<parent>
+		<groupId>com.swissquote.foundation.serialization</groupId>
 		<artifactId>sq-serialization-json</artifactId>
-		<groupId>com.swissquote</groupId>
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
@@ -19,7 +19,7 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.swissquote</groupId>
+			<groupId>com.swissquote.foundation.serialization</groupId>
 			<artifactId>sq-serialization-json-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -27,6 +27,11 @@
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 			<version>${gson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.swissquote.foundation.soa</groupId>
+			<artifactId>sq-soa-gson-jaxrs-json-provider</artifactId>
+			<version>2.1.18</version>
 		</dependency>
 	</dependencies>
 

@@ -1,6 +1,7 @@
 package com.swissquote.foundation.serialization.json;
 
 import java.io.Writer;
+import java.lang.reflect.Type;
 import java.util.Map;
 
 /**
@@ -12,8 +13,10 @@ public interface JsonObjectMapper<N, P> {
 
 	void toJson(Object value, Writer writer) throws Exception;
 
+	N toJsonNode(Object value) throws Exception;
+
 	<T> T fromJson(Object json, Class<T> valueType) throws Exception;
 
-	<T> T fromJson(Object json, Map<String, Object> javaTypes) throws Exception;
+	<T> T fromJson(P parser, Type valueType) throws Exception;
 
 }

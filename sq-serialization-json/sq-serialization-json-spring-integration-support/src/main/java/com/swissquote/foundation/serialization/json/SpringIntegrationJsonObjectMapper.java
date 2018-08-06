@@ -1,73 +1,63 @@
 package com.swissquote.foundation.serialization.json;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.io.Writer;
-import java.util.Arrays;
+import java.lang.reflect.Type;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.ServiceLoader;
 
 import org.springframework.integration.mapping.support.JsonHeaders;
+import org.springframework.integration.support.json.JsonObjectMapperAdapter;
 import org.springframework.util.ClassUtils;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class SpringIntegrationJsonObjectMapper implements JsonObjectMapper<Map<String, Object>, Object> {
+@SuppressWarnings("unchecked")
+public class SpringIntegrationJsonObjectMapper<N, P> extends JsonObjectMapperAdapter<N, P> {
 
 	private volatile ClassLoader classLoader = ClassUtils.getDefaultClassLoader();
-	private static final Collection<Class<?>> supportedJsonTypes =
-			Arrays.<Class<?>> asList(String.class, byte[].class, byte[].class, File.class, InputStream.class, Reader.class);
 
-	private final Gson gson;
+	private JsonObjectMapper<N, P> jsonObjectMapper;
 
 	public SpringIntegrationJsonObjectMapper() {
-		this(new GsonBuilder().create());
+		ServiceLoader<JsonObjectMapper> service = ServiceLoader.load(JsonObjectMapper.class);
+		Iterator<JsonObjectMapper> iterator = service.iterator();
+
+		if (!iterator.hasNext()) {
+			throw new NullPointerException("No implementation of " + JsonObjectMapper.class.getName() + "found in META-INF");
+		}
+
+		jsonObjectMapper = iterator.next();
+
+		if (iterator.hasNext()) {
+			throw new IllegalArgumentException("More than one implementation of " + JsonObjectMapper.class.getName() + "has been provided");
+		}
 	}
 
-	public SpringIntegrationJsonObjectMapper(Gson gson) {
-		this.gson = gson;
+	public SpringIntegrationJsonObjectMapper(JsonObjectMapper<N, P> jsonObjectMapper) {
+		this.jsonObjectMapper = jsonObjectMapper;
 	}
 
 	@Override
 	public String toJson(Object value) throws Exception {
-		return gson.toJson(value);
+		return jsonObjectMapper.toJson(value);
 	}
 
 	@Override
 	public void toJson(Object value, Writer writer) throws Exception {
-		gson.toJson(value, writer);
+		jsonObjectMapper.toJson(value, writer);
+	}
+
+	@Override
+	public N toJsonNode(Object value) throws Exception {
+		return jsonObjectMapper.toJsonNode(value);
 	}
 
 	@Override
 	public <T> T fromJson(Object json, Class<T> valueType) throws Exception {
-
-		if (json instanceof String) {
-			return gson.fromJson((String) json, valueType);
-		} else if (json instanceof byte[]) {
-			return gson.fromJson(new InputStreamReader(new ByteArrayInputStream((byte[]) json)), valueType);
-		} else if (json instanceof char[]) {
-			return gson.fromJson(new String((char[]) json), valueType);
-		} else if (json instanceof File) {
-			try (Reader reader = new FileReader((File) json)) {
-				return gson.fromJson(reader, valueType);
-			}
-		} else if (json instanceof InputStream) {
-			return gson.fromJson(new InputStreamReader((InputStream) json), valueType);
-		} else if (json instanceof Reader) {
-			return gson.fromJson((Reader) json, valueType);
-		} else {
-			throw new IllegalArgumentException("'json' argument must be an instance of: " + supportedJsonTypes
-					+ " , but gotten: " + json.getClass());
-		}
+		return jsonObjectMapper.fromJson(json, valueType);
 	}
 
 	@Override
@@ -75,9 +65,6 @@ public class SpringIntegrationJsonObjectMapper implements JsonObjectMapper<Map<S
 		Class<?> classType = this.createJavaType(javaTypes, JsonHeaders.TYPE_ID);
 		Class<?> contentClassType = this.createJavaType(javaTypes, JsonHeaders.CONTENT_TYPE_ID);
 		Class<?> keyClassType = this.createJavaType(javaTypes, JsonHeaders.KEY_TYPE_ID);
-		TypeToken<?> classTypeToken = TypeToken.get(classType);
-
-		gson.fromJson((String) json, classTypeToken.getType());
 
 		if (keyClassType != null) {
 			log.warn("Gson doesn't support the Map 'key' conversion. Will be returned raw Map<String, Object>");
@@ -90,6 +77,11 @@ public class SpringIntegrationJsonObjectMapper implements JsonObjectMapper<Map<S
 		}
 
 		return (T) fromJson(json, classType);
+	}
+
+	@Override
+	public <T> T fromJson(P parser, Type valueType) throws Exception {
+		return jsonObjectMapper.fromJson(parser, valueType);
 	}
 
 	private Class<?> createJavaType(Map<String, Object> javaTypes, String javaTypeKey) throws Exception {
