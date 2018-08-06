@@ -1,0 +1,30 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>sq-serialization</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<modules>
+		<module>sq-serialization-json</module>
+	</modules>
+	<packaging>pom</packaging>
+
+	<parent>
+		<groupId>com.swissquote</groupId>
+		<artifactId>sq-parent-pom</artifactId>
+		<version>18.6.1</version>
+	</parent>
+
+	<properties>
+		<sq.artifact.type>library</sq.artifact.type>
+		<sq.maintainer.email>swd.dtg@swissquote.ch</sq.maintainer.email>
+	</properties>
+
+	<scm>
+		<connection>scm:hg:https://mercurial.bank.swissquote.ch/hg/foundation/sq-serialization/</connection>
+		<developerConnection>scm:hg:https://mercurial.bank.swissquote.ch/hg/foundation/sq-serialization/</developerConnection>
+		<url>https://mercurial.bank.swissquote.ch/hg/foundation/sq-serialization/</url>
+		<tag>HEAD</tag>
+	</scm>
+
+</project>
