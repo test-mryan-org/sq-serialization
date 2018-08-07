@@ -30,11 +30,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class GsonJsonObjectMapper implements JsonObjectMapper<JsonElement, Object> {
 
-	private static final Collection<Class<?>> supportedJsonTypes =
-			Arrays.<Class<?>> asList(String.class, byte[].class, byte[].class, File.class, InputStream.class, Reader.class);
-
-	private static final String DATE_FORMAT_PATTERN = "yyyy'-'MM'-'dd'T'HH':'mm':'ssZ";
-
 	private final GsonBuilder builder;
 	private Gson gson;
 

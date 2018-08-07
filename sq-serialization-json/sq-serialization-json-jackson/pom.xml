@@ -3,29 +3,19 @@
 		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<parent>
-		<groupId>com.swissquote.foundation.serialization</groupId>
 		<artifactId>sq-serialization-json</artifactId>
+		<groupId>com.swissquote.foundation.serialization</groupId>
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>sq-serialization-json-gson</artifactId>
+	<artifactId>sq-serialization-json-jackson</artifactId>
 
 	<properties>
 		<sq.artifact.type>library</sq.artifact.type>
 
-		<sq-soa-gson.version>2.1.18</sq-soa-gson.version>
+		<jackson.version>2.9.5</jackson.version>
 	</properties>
-
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.slf4j</groupId>
-				<artifactId>slf4j-api</artifactId>
-				<version>${slf4j.version}</version>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
 
 	<dependencies>
 		<dependency>
@@ -34,9 +24,9 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.swissquote.foundation.soa</groupId>
-			<artifactId>sq-soa-gson-jaxrs-json-provider</artifactId>
-			<version>${sq-soa-gson.version}</version>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson.version}</version>
 		</dependency>
 	</dependencies>
 
