@@ -1,0 +1,18 @@
+syntax: glob
+target
+*/target/*
+*/.idea/*
+.classpath
+.project
+.settings
+.idea
+*.iml
+bin
+*.ipr
+*.iws
+MANIFEST.MF
+.metadata
+swc-lib
+*.orig
+.as3_classpath
+*/flex/*.swf
