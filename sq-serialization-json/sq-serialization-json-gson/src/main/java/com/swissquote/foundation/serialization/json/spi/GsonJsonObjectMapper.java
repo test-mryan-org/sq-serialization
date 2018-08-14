@@ -40,7 +40,9 @@ public class GsonJsonObjectMapper implements JsonObjectMapper<JsonElement, Objec
 		this.builder = builder;
 		gson = builder.create();
 	}
-
+	/**
+	 * SQ pre-defined gson object
+	 */
 	public GsonJsonObjectMapper() {
 		this(new GsonBuilder()
 				.setDateFormat(DATE_FORMAT_PATTERN)

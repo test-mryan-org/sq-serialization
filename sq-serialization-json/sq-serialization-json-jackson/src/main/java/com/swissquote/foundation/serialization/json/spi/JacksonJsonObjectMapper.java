@@ -10,29 +10,36 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collection;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.swissquote.foundation.serialization.json.spi.JsonObjectMapper;
+
+import lombok.Getter;
 
 public class JacksonJsonObjectMapper implements JsonObjectMapper<JsonNode, JsonParser> {
 
 	private static final Collection<Class<?>> supportedJacksonJsonTypes =
 			Arrays.asList(String.class, byte[].class, File.class, URL.class, InputStream.class, Reader.class);
 
+	@Getter
 	private final ObjectMapper objectMapper;
 
 	public JacksonJsonObjectMapper(ObjectMapper objectMapper) {
 		this.objectMapper = objectMapper;
 	}
 
+	/**
+	 * SQ pre-defined object mapper
+	 */
 	public JacksonJsonObjectMapper() {
 		this(new ObjectMapper()
 				.setDateFormat(new SimpleDateFormat(DATE_FORMAT_PATTERN))
 				.configure(MapperFeature.DEFAULT_VIEW_INCLUSION, false)
 				.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+				.setSerializationInclusion(JsonInclude.Include.NON_NULL)
 				.findAndRegisterModules());
 	}
 

@@ -1,14 +1,14 @@
 package com.swissquote.foundation.serialization.json;
 
 import org.apache.commons.io.IOUtils;
+import org.junit.Assert;
 import org.junit.Test;
 
 import com.swissquote.foundation.serialization.json.spi.JacksonJsonObjectMapper;
-import com.swissquote.foundation.serialization.json.spi.JsonObjectMapper;
 
 public class JacksonJsonObjectMapperDeserializationTest {
 
-	private JsonObjectMapper jsonObjectMapper = new JacksonJsonObjectMapper();
+	private JacksonJsonObjectMapper jsonObjectMapper = new JacksonJsonObjectMapper();
 
 	@Test
 	public void testToJavaUtilDate() throws Exception {
@@ -63,4 +63,26 @@ public class JacksonJsonObjectMapperDeserializationTest {
 		// WHEN
 		jsonObjectMapper.fromJson(json, TestObjectZonedDateTime.class);
 	}
+
+	@Test
+	public void testNoDefaultConstructor() throws Exception {
+		// GIVEN
+		jsonObjectMapper.getObjectMapper().addMixIn(TestValueInstant.class, TestValueInstantMixin.class);
+		String json = IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream("json/object-instant.json"));
+
+		// WHEN
+		jsonObjectMapper.fromJson(json, TestValueInstant.class);
+	}
+
+	@Test
+	public void testToNullableValue() throws Exception {
+		// GIVEN
+		String json = IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream("json/object-instant_null.json"));
+
+		// WHEN
+		TestObjectInstant obj = jsonObjectMapper.fromJson(json, TestObjectInstant.class);
+		Assert.assertNull(obj.getName());
+		Assert.assertNull(obj.getCreationDate());
+	}
+
 }

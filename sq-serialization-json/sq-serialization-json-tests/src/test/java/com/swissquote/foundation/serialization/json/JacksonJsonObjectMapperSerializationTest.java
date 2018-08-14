@@ -13,11 +13,7 @@ import static com.swissquote.foundation.serialization.json.DateTestUtils.getLoca
 import static com.swissquote.foundation.serialization.json.DateTestUtils.getZonedDateTime;
 import static com.swissquote.foundation.serialization.json.DateTestUtils.getZonedDateTimeString;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.hamcrest.Matchers.not;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import org.junit.Test;
 
@@ -42,7 +38,7 @@ public class JacksonJsonObjectMapperSerializationTest {
 
 		// THEN
 		with(SQJson).assertThat("creationDate", equalTo(getJavaUtilDateString()));
-		with(SQJson2).assertThat("creationDate", isEmptyOrNullString());
+		with(SQJson2).assertNotDefined("creationDate");
 		with(originalJson).assertThat("creationDate", not(getJavaUtilDateString()));
 	}
 
@@ -59,7 +55,7 @@ public class JacksonJsonObjectMapperSerializationTest {
 
 		// THEN
 		with(SQJson).assertThat("creationDate", equalTo(getInstantString()));
-		with(SQJson2).assertThat("creationDate", isEmptyOrNullString());
+		with(SQJson2).assertNotDefined("creationDate");
 		with(originalJson).assertThat("creationDate", not(getInstantString()));
 	}
 
@@ -76,7 +72,7 @@ public class JacksonJsonObjectMapperSerializationTest {
 
 		// THEN
 		with(SQJson).assertThat("creationDate", equalTo(getLocalDateString()));
-		with(SQJson2).assertThat("creationDate", isEmptyOrNullString());
+		with(SQJson2).assertNotDefined("creationDate");
 		with(originalJson).assertThat("creationDate", not(getLocalDateString()));
 	}
 
@@ -93,7 +89,7 @@ public class JacksonJsonObjectMapperSerializationTest {
 
 		// THEN
 		with(SQJson).assertThat("creationDate", equalTo(getLocalDateTimeString()));
-		with(SQJson2).assertThat("creationDate", isEmptyOrNullString());
+		with(SQJson2).assertNotDefined("creationDate");
 		with(originalJson).assertThat("creationDate", not(getLocalDateTimeString()));
 	}
 
@@ -110,7 +106,7 @@ public class JacksonJsonObjectMapperSerializationTest {
 
 		// THEN
 		with(SQJson).assertThat("creationDate", equalTo(getLocalTimeString()));
-		with(SQJson2).assertThat("creationDate", isEmptyOrNullString());
+		with(SQJson2).assertNotDefined("creationDate");
 		with(originalJson).assertThat("creationDate", not(getLocalTimeString()));
 	}
 
@@ -127,7 +123,7 @@ public class JacksonJsonObjectMapperSerializationTest {
 
 		// THEN
 		with(SQJson).assertThat("creationDate", equalTo(getZonedDateTimeString()));
-		with(SQJson2).assertThat("creationDate", isEmptyOrNullString());
+		with(SQJson2).assertNotDefined("creationDate");
 		with(originalJson).assertThat("creationDate", not(getZonedDateTimeString()));
 	}
 

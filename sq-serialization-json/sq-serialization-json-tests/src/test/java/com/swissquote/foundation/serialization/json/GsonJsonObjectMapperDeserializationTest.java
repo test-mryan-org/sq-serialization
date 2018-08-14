@@ -1,14 +1,14 @@
 package com.swissquote.foundation.serialization.json;
 
 import org.apache.commons.io.IOUtils;
+import org.junit.Assert;
 import org.junit.Test;
 
 import com.swissquote.foundation.serialization.json.spi.GsonJsonObjectMapper;
-import com.swissquote.foundation.serialization.json.spi.JsonObjectMapper;
 
 public class GsonJsonObjectMapperDeserializationTest {
 
-	private JsonObjectMapper jsonObjectMapper = new GsonJsonObjectMapper();
+	private GsonJsonObjectMapper jsonObjectMapper = new GsonJsonObjectMapper();
 
 	@Test
 	public void testToJavaUtilDate() throws Exception {
@@ -62,6 +62,18 @@ public class GsonJsonObjectMapperDeserializationTest {
 
 		// WHEN
 		jsonObjectMapper.fromJson(json, TestObjectZonedDateTime.class);
+	}
+
+	@Test
+	public void testToNullableValue() throws Exception {
+		// GIVEN
+		String json = IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream("json/object-instant_null.json"));
+
+		// WHEN
+
+		TestObjectInstant obj = jsonObjectMapper.fromJson(json, TestObjectInstant.class);
+		Assert.assertNull(obj.getName());
+		Assert.assertNull(obj.getCreationDate());
 	}
 
 }
