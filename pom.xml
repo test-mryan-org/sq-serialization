@@ -3,7 +3,7 @@
 
 	<groupId>com.swissquote.foundation.serialization</groupId>
 	<artifactId>sq-serialization</artifactId>
-	<version>1.0.0.RC1</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<modules>
 		<module>sq-serialization-json</module>
 	</modules>
@@ -24,7 +24,7 @@
 		<connection>scm:hg:https://mercurial.bank.swissquote.ch/hg/foundation/sq-serialization/</connection>
 		<developerConnection>scm:hg:https://mercurial.bank.swissquote.ch/hg/foundation/sq-serialization/</developerConnection>
 		<url>https://mercurial.bank.swissquote.ch/hg/foundation/sq-serialization/</url>
-		<tag>sq-serialization-1.0.0.RC1</tag>
+		<tag>HEAD</tag>
 	</scm>
 
 </project>
