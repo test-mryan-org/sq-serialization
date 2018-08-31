@@ -155,17 +155,14 @@ public class GsonJsonObjectMapperSerializationTest {
 	@Test
 	public void testFromException() throws Exception {
 
-		jsonObjectMapper.toJson(new Self(new Self(new Self())));
-
 		// GIVEN
 		Exception exception = new Exception("client-exception", new Exception(new Exception("root")));
 		exception.addSuppressed(new Exception("suppressed"));
 
-		jsonObjectMapper.toJson(exception);
-
 		// WHEN
 		String SQJson = jsonObjectMapper.toJson(exception);
 		String originalJson = new Gson().toJson(exception);
+		jsonObjectMapper.toJson(new Self(new Self(new Self())));
 
 		// THEN
 		with(SQJson).assertThat("detailMessage", equalTo("client-exception"));

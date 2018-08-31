@@ -132,8 +132,6 @@ public class JacksonJsonObjectMapperSerializationTest {
 	@Test
 	public void testFromException() throws Exception {
 
-		String s = jsonObjectMapper.toJson(new Self(new Self(new Self())));
-
 		// GIVEN
 		Exception exception = new Exception("client-exception", new Exception(new Exception("root")));
 		exception.addSuppressed(new Exception("suppressed"));
@@ -141,6 +139,7 @@ public class JacksonJsonObjectMapperSerializationTest {
 		// WHEN
 		String SQJson = jsonObjectMapper.toJson(exception);
 		String originalJson = new ObjectMapper().writeValueAsString(exception);
+		//		String s = jsonObjectMapper.toJson(new Self(new Self(new Self())));
 
 		// THEN
 		with(SQJson).assertThat("detailMessage", equalTo("client-exception"));
@@ -158,24 +157,24 @@ public class JacksonJsonObjectMapperSerializationTest {
 		with(json).assertNotDefined("name");
 	}
 
-	@RequiredArgsConstructor
-	public static class Self {
-		private final Self self;
-
-		public Self() {
-			self = this;
-		}
-	}
+//	@RequiredArgsConstructor
+//	public static class Self {
+//		private final Self self;
+//
+//		public Self() {
+//			self = this;
+//		}
+//	}
 
 	@RequiredArgsConstructor
 	public static class WithExclusionField {
+
 		private final String stackTrace;
 		private final String suppressedExceptions;
 
 		public String getName() {
 			return stackTrace;
 		}
-
 	}
 
 }
