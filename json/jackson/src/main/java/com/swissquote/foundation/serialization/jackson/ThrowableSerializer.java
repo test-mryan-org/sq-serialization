@@ -17,13 +17,16 @@ public class ThrowableSerializer extends StdSerializer<Throwable> {
 
 	private static Field causeField;
 	private static Field suppressedField;
+	private static Field stackTraceField;
 
 	static {
 		try {
 			causeField = Throwable.class.getDeclaredField("cause");
 			suppressedField = Throwable.class.getDeclaredField("suppressedExceptions");
+			stackTraceField = Throwable.class.getDeclaredField("suppressedExceptions");
 			causeField.setAccessible(true);
 			suppressedField.setAccessible(true);
+			stackTraceField.setAccessible(true);
 		}
 		catch (NoSuchFieldException e) {
 			log.warn("Impossible to retrieve fields cause & suppressedExceptions for Throwable", e);
@@ -40,10 +43,10 @@ public class ThrowableSerializer extends StdSerializer<Throwable> {
 
 		// loop until the cause is the exception itself
 		Throwable root = value;
-		while (root.getCause() != null) {
+		do {
 			// remove stackTrace and suppressedExceptions for each throwable in the chain
-			root.setStackTrace(null);
 			try {
+				stackTraceField.set(root, null);
 				suppressedField.set(root, null);
 			}
 			catch (IllegalAccessException | NullPointerException e) {
@@ -51,6 +54,7 @@ public class ThrowableSerializer extends StdSerializer<Throwable> {
 			}
 			root = root.getCause();
 		}
+		while (root.getCause() != null);
 
 		// ends the chain
 		try {

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<parent>
 		<artifactId>sq-serialization-json</artifactId>
 		<groupId>com.swissquote.foundation.serialization</groupId>
@@ -42,7 +43,7 @@
 		<resources>
 			<!-- include main.properties -->
 			<resource>
-				<directory>src/main/resources/META-INF</directory>
+				<directory>src/main/resources</directory>
 				<filtering>true</filtering>
 				<includes>
 					<include>version.properties</include>
@@ -50,7 +51,7 @@
 			</resource>
 			<!-- exclude everything else from filtering -->
 			<resource>
-				<directory>src/main/resources/META-INF</directory>
+				<directory>src/main/resources</directory>
 				<filtering>false</filtering>
 				<excludes>
 					<exclude>version.properties</exclude>

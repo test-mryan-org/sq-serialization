@@ -17,12 +17,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public final class PackageVersion implements Versioned {
 
-	public final static Version VERSION = buildVersion();
-
-	private static Version buildVersion() {
+	public static Version buildVersion() {
 		Properties props = new Properties();
 		try {
-			props.load(PackageVersion.class.getClassLoader().getResourceAsStream("META-INF/version.properties"));
+			props.load(PackageVersion.class.getClassLoader().getResourceAsStream("version.properties"));
 		}
 		catch (IOException e) {
 			e.printStackTrace();
@@ -36,6 +34,6 @@ public final class PackageVersion implements Versioned {
 
 	@Override
 	public Version version() {
-		return VERSION;
+		return buildVersion();
 	}
 }
