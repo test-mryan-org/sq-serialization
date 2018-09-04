@@ -41,13 +41,6 @@ public class ThrowableSerializer extends StdSerializer<Throwable> {
 	}
 
 	private interface FieldUpdater {
-		FieldUpdater VOID = new FieldUpdater() {
-			@Override
-			public void setNull(Object object) {
-				// null
-			}
-		};
-
 		static FieldUpdater forClass(Class<?> cls, String name) {
 			try {
 				Field field = cls.getDeclaredField(name);
@@ -58,7 +51,9 @@ public class ThrowableSerializer extends StdSerializer<Throwable> {
 			}
 			catch (NoSuchFieldException e) {
 				log.warn("Impossible to retrieve field {} for class {}", name, cls);
-				return VOID;
+				return obj -> {
+					// nothing we can do
+				};
 			}
 		}
 
