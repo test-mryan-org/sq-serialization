@@ -10,30 +10,17 @@ import com.fasterxml.jackson.databind.SerializationConfig;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class ThrowableSerializer extends StdSerializer<Throwable> {
 
+	private static FieldUpdater causeField = FieldUpdater.forClass(Throwable.class, "cause");
+	private static FieldUpdater suppressedField = FieldUpdater.forClass(Throwable.class, "suppressedExceptions");
+	private static FieldUpdater stackTraceField = FieldUpdater.forClass(Throwable.class, "stackTrace");
+
 	private final JsonSerializer<Throwable> defaultSerializer;
-
-	private static Field causeField;
-	private static Field suppressedField;
-	private static Field stackTraceField;
-
-	static {
-		try {
-			causeField = Throwable.class.getDeclaredField("cause");
-			suppressedField = Throwable.class.getDeclaredField("suppressedExceptions");
-			stackTraceField = Throwable.class.getDeclaredField("stackTrace");
-			causeField.setAccessible(true);
-			suppressedField.setAccessible(true);
-			stackTraceField.setAccessible(true);
-		}
-		catch (NoSuchFieldException e) {
-			log.warn("Impossible to retrieve fields cause & suppressedExceptions for Throwable", e);
-		}
-	}
 
 	protected ThrowableSerializer(SerializationConfig config, BeanDescription beanDesc, JsonSerializer<?> defaultSerializer) {
 		super(Throwable.class);
@@ -42,34 +29,58 @@ public class ThrowableSerializer extends StdSerializer<Throwable> {
 
 	@Override
 	public void serialize(Throwable value, JsonGenerator gen, SerializerProvider provider) throws IOException {
-
-		// loop until the cause is the exception itself
-		Throwable root = value;
-		try {
-			do {
-				 // remove stackTrace and suppressedExceptions for each throwable in the chain
-				try {
-					stackTraceField.set(root, null);
-					suppressedField.set(root, null);
-				}
-				catch (IllegalAccessException | NullPointerException e) {
-					log.warn("Impossible to set suppressedExceptions or stackTrace fields to null for {}", root.getClass());
-				}
-				root = root.getCause();
-			}
-			while (root.getCause() != null);
-
-			// ends the chain
-			causeField.set(root, null);
+		stackTraceField.setNull(value);
+		suppressedField.setNull(value);
+		if (value.getCause() == null) {
+			// Set 'cause' of root cause to null to break the cycle
+			// | It looks strange to set this field to null when its getter 'getCause()' returns null
+			// | but the field is probably equals to it-self
+			causeField.setNull(value);
 		}
-		catch (IllegalAccessException e) {
-			log.warn("Impossible to set the field cause to null for {}", root.getClass());
-		}
-		catch (NullPointerException e) {
-			// means that we face an exception which is last in chain and has already been cleaned
-			// --> do nothing
-		}
-
 		defaultSerializer.serialize(value, gen, provider);
+	}
+
+	private interface FieldUpdater {
+		FieldUpdater VOID = new FieldUpdater() {
+			@Override
+			public void setNull(Object object) {
+				// null
+			}
+		};
+
+		static FieldUpdater forClass(Class<?> cls, String name) {
+			try {
+				Field field = cls.getDeclaredField(name);
+				if (!field.isAccessible()) {
+					field.setAccessible(true);
+				}
+				return new ValidUpdater(name, field);
+			}
+			catch (NoSuchFieldException e) {
+				log.warn("Impossible to retrieve field {} for class {}", name, cls);
+				return VOID;
+			}
+		}
+
+		void setNull(Object object);
+	}
+
+	@RequiredArgsConstructor
+	private static class ValidUpdater implements FieldUpdater {
+		private final String name;
+		private final Field field;
+
+		@Override
+		public void setNull(Object object) {
+			try {
+				if (log.isDebugEnabled()) {
+					log.debug("Setting field '" + name + "' to null on object " + object);
+				}
+				field.set(object, null);
+			}
+			catch (IllegalAccessException e) {
+				log.warn("Impossible to set field {} to null on object {}", name, object);
+			}
+		}
 	}
 }
