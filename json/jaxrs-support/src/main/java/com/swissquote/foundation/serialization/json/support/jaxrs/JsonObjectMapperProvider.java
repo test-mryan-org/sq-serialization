@@ -26,12 +26,12 @@ import com.swissquote.foundation.serialization.json.spi.JsonObjectMapper;
 @Provider
 @Consumes({MediaType.APPLICATION_JSON, "text/json"})
 @Produces({MediaType.APPLICATION_JSON, "text/json"})
-public class GsonProvider implements MessageBodyReader<Object>, MessageBodyWriter<Object> {
+public class JsonObjectMapperProvider implements MessageBodyReader<Object>, MessageBodyWriter<Object> {
 	private static final Charset UTF8 = Charset.forName("UTF-8");
 
 	private final JsonObjectMapper objectMapper;
 
-	public GsonProvider() {
+	public JsonObjectMapperProvider() {
 		ServiceLoader<JsonObjectMapper> service = ServiceLoader.load(JsonObjectMapper.class);
 		Iterator<JsonObjectMapper> iterator = service.iterator();
 

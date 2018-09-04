@@ -14,18 +14,18 @@ import javax.ws.rs.core.MultivaluedMap;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.swissquote.foundation.serialization.json.support.jaxrs.GsonProvider;
+import com.swissquote.foundation.serialization.json.support.jaxrs.JsonObjectMapperProvider;
 
 public class GsonProviderTest {
 
-	private GsonProvider writeGsonProvider;
+	private JsonObjectMapperProvider writeProvider;
 
-	private GsonProvider readGsonProvider;
+	private JsonObjectMapperProvider readProvider;
 
 	@Before
 	public void initTest() {
-		writeGsonProvider = new GsonProvider();
-		readGsonProvider = new GsonProvider();
+		writeProvider = new JsonObjectMapperProvider();
+		readProvider = new JsonObjectMapperProvider();
 	}
 
 	@Test
@@ -40,7 +40,7 @@ public class GsonProviderTest {
 		PipedOutputStream outputStream = new PipedOutputStream(inputStream);
 		MultivaluedMap<String, Object> httpHeaders = new MultivaluedHashMap<>();
 
-		writeGsonProvider.writeTo("nټrd", String.class, String.class, null, //
+		writeProvider.writeTo("nټrd", String.class, String.class, null, //
 				MediaType.APPLICATION_JSON_TYPE, httpHeaders, outputStream);
 		outputStream.close();
 		String json = fetchJsonFromInputStream(inputStream);

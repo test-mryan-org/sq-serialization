@@ -21,12 +21,12 @@ import javax.ws.rs.ext.Provider;
 @Provider
 @Consumes({MediaType.APPLICATION_JSON, "text/json"})
 @Produces({MediaType.APPLICATION_JSON, "text/json"})
-public class StringGsonProvider implements MessageBodyReader<String>, MessageBodyWriter<String> {
+public class StringObjectMapperProvider implements MessageBodyReader<String>, MessageBodyWriter<String> {
 
-	private GsonProvider delegate;
+	private JsonObjectMapperProvider delegate;
 
-	public StringGsonProvider() {
-		delegate = new GsonProvider();
+	public StringObjectMapperProvider() {
+		delegate = new JsonObjectMapperProvider();
 	}
 
 	@Override

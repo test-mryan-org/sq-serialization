@@ -1,2 +1,2 @@
-com.swissquote.foundation.serialization.json.support.jaxrs.GsonProvider
-com.swissquote.foundation.serialization.json.support.jaxrs.StringGsonProvider
+com.swissquote.foundation.serialization.json.support.jaxrs.JsonObjectMapperProvider
+com.swissquote.foundation.serialization.json.support.jaxrs.StringObjectMapperProvider
