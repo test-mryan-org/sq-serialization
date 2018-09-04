@@ -13,13 +13,10 @@ import javax.ws.rs.core.MultivaluedMap;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.swissquote.foundation.serialization.json.support.jaxrs.GsonProvider;
 
 public class GsonProviderTest {
-	private static final Logger logger = LoggerFactory.getLogger(GsonProviderTest.class);
 
 	private GsonProvider writeGsonProvider;
 
