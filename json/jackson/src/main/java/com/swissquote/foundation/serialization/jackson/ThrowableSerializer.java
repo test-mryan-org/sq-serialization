@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.BeanDescription;
 import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.SerializationConfig;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
@@ -23,7 +25,7 @@ public class ThrowableSerializer extends StdSerializer<Throwable> {
 		try {
 			causeField = Throwable.class.getDeclaredField("cause");
 			suppressedField = Throwable.class.getDeclaredField("suppressedExceptions");
-			stackTraceField = Throwable.class.getDeclaredField("suppressedExceptions");
+			stackTraceField = Throwable.class.getDeclaredField("stackTrace");
 			causeField.setAccessible(true);
 			suppressedField.setAccessible(true);
 			stackTraceField.setAccessible(true);
@@ -33,7 +35,7 @@ public class ThrowableSerializer extends StdSerializer<Throwable> {
 		}
 	}
 
-	protected ThrowableSerializer(JsonSerializer<?> defaultSerializer) {
+	protected ThrowableSerializer(SerializationConfig config, BeanDescription beanDesc, JsonSerializer<?> defaultSerializer) {
 		super(Throwable.class);
 		this.defaultSerializer = (JsonSerializer<Throwable>) defaultSerializer;
 	}
@@ -43,25 +45,29 @@ public class ThrowableSerializer extends StdSerializer<Throwable> {
 
 		// loop until the cause is the exception itself
 		Throwable root = value;
-		do {
-			// remove stackTrace and suppressedExceptions for each throwable in the chain
-			try {
-				stackTraceField.set(root, null);
-				suppressedField.set(root, null);
-			}
-			catch (IllegalAccessException | NullPointerException e) {
-				log.warn("Impossible to set suppressedExceptions field to null for {}", root.getClass());
-			}
-			root = root.getCause();
-		}
-		while (root.getCause() != null);
-
-		// ends the chain
 		try {
+			do {
+				 // remove stackTrace and suppressedExceptions for each throwable in the chain
+				try {
+					stackTraceField.set(root, null);
+					suppressedField.set(root, null);
+				}
+				catch (IllegalAccessException | NullPointerException e) {
+					log.warn("Impossible to set suppressedExceptions or stackTrace fields to null for {}", root.getClass());
+				}
+				root = root.getCause();
+			}
+			while (root.getCause() != null);
+
+			// ends the chain
 			causeField.set(root, null);
 		}
-		catch (IllegalAccessException | NullPointerException e) {
+		catch (IllegalAccessException e) {
 			log.warn("Impossible to set the field cause to null for {}", root.getClass());
+		}
+		catch (NullPointerException e) {
+			// means that we face an exception which is last in chain and has already been cleaned
+			// --> do nothing
 		}
 
 		defaultSerializer.serialize(value, gen, provider);

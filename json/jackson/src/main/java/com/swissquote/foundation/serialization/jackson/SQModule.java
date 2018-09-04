@@ -16,7 +16,7 @@ public class SQModule extends SimpleModule {
 			public JsonSerializer<?> modifySerializer(
 					SerializationConfig config, BeanDescription beanDesc, JsonSerializer<?> serializer) {
 				if (Throwable.class.isAssignableFrom(beanDesc.getBeanClass())) {
-					return new ThrowableSerializer(serializer);
+					return new ThrowableSerializer(config, beanDesc, serializer);
 				}
 				return super.modifySerializer(config, beanDesc, serializer);
 			}
