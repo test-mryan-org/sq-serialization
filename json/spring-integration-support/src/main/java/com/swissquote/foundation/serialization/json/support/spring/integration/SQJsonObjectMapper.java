@@ -6,10 +6,10 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.springframework.integration.mapping.support.JsonHeaders;
-import org.springframework.integration.support.json.JsonObjectMapper;
 import org.springframework.integration.support.json.JsonObjectMapperAdapter;
 import org.springframework.util.ClassUtils;
 
+import com.swissquote.foundation.serialization.json.JsonObjectMapper;
 import com.swissquote.foundation.serialization.json.JsonSerialization;
 import com.swissquote.foundation.serialization.json.spi.JsonSerializationProvider;
 
@@ -28,7 +28,7 @@ public class SQJsonObjectMapper<N, P> extends JsonObjectMapperAdapter<N, P> {
 	}
 
 	public SQJsonObjectMapper(JsonSerializationProvider provider) {
-		this.jsonObjectMapper = (JsonObjectMapper<N, P>) provider.getJsonObjectMapper();
+		this.jsonObjectMapper = provider.getJsonObjectMapper();
 	}
 
 	public SQJsonObjectMapper(JsonObjectMapper<N, P> jsonObjectMapper) {
