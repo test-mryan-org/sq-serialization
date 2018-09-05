@@ -1,6 +1,7 @@
 package com.swissquote.foundation.serialization.json;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,5 +13,5 @@ import lombok.NoArgsConstructor;
 class TestObjectZonedDateTime {
 
 	private String name;
-	private ZonedDateTime creationDate;
+	private List<ZonedDateTime> creationDates;
 }

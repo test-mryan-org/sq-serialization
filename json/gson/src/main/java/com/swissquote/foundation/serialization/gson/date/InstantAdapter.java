@@ -2,6 +2,7 @@ package com.swissquote.foundation.serialization.gson.date;
 
 import java.lang.reflect.Type;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import com.google.gson.JsonDeserializationContext;
@@ -18,6 +19,11 @@ import com.google.gson.JsonSerializer;
  */
 public class InstantAdapter implements JsonSerializer<Instant>, JsonDeserializer<Instant> {
 
+	public static void main(String[] args) {
+		System.out.println(DateTimeFormatter.ISO_INSTANT.format(Instant.now()));
+		System.out.println(DateTimeFormatter.ISO_LOCAL_DATE.format(LocalDate.now()));
+	}
+
 	@Override
 	public JsonElement serialize(Instant instant, Type typeOfSrc, JsonSerializationContext context) {
 		return new JsonPrimitive(DateTimeFormatter.ISO_INSTANT.format(instant));
@@ -27,6 +33,5 @@ public class InstantAdapter implements JsonSerializer<Instant>, JsonDeserializer
 	public Instant deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
 		return Instant.parse(json.getAsString());
 	}
-
 
 }

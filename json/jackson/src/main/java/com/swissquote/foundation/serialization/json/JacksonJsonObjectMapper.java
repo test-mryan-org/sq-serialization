@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.swissquote.foundation.serialization.json.JsonObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import lombok.Getter;
 
@@ -41,7 +41,8 @@ public class JacksonJsonObjectMapper implements JsonObjectMapper<JsonNode, JsonP
 	 * SQ pre-defined object mapper
 	 */
 	public JacksonJsonObjectMapper() {
-		this(standardObjectMapper().findAndRegisterModules());
+		this(standardObjectMapper()
+				.findAndRegisterModules());
 	}
 
 	public static ObjectMapper standardObjectMapper() {
@@ -51,7 +52,12 @@ public class JacksonJsonObjectMapper implements JsonObjectMapper<JsonNode, JsonP
 				.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
 				.setVisibility(PropertyAccessor.ALL, Visibility.NONE)
 				.setVisibility(PropertyAccessor.FIELD, Visibility.ANY)
-				.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+				.setSerializationInclusion(JsonInclude.Include.NON_NULL)
+				.configure(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE, false)
+				// new need to explicitly register the module
+				// https://github.com/FasterXML/jackson-modules-java8/blob/jackson-modules-java8-2.9.6/README.md#registering-modules
+				.registerModule(new JavaTimeModule());
+
 
 		return objectMapper;
 	}

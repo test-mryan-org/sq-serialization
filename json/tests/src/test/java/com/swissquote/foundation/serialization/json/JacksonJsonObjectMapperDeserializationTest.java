@@ -14,7 +14,8 @@ public class JacksonJsonObjectMapperDeserializationTest {
 		String json = IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream("json/object-java-util-date.json"));
 
 		// WHEN
-		jsonObjectMapper.fromJson(json, TestObjectJavaUtilDate.class);
+		TestObjectJavaUtilDate obj = jsonObjectMapper.fromJson(json, TestObjectJavaUtilDate.class);
+		System.out.println(obj);
 	}
 
 	@Test
@@ -32,7 +33,8 @@ public class JacksonJsonObjectMapperDeserializationTest {
 		String json = IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream("json/object-local-date.json"));
 
 		// WHEN
-		jsonObjectMapper.fromJson(json, TestObjectLocalDate.class);
+		TestObjectLocalDate obj = jsonObjectMapper.fromJson(json, TestObjectLocalDate.class);
+		Assert.assertNotNull(obj);
 	}
 
 	@Test
@@ -50,7 +52,8 @@ public class JacksonJsonObjectMapperDeserializationTest {
 		String json = IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream("json/object-local-time.json"));
 
 		// WHEN
-		jsonObjectMapper.fromJson(json, TestObjectLocalTime.class);
+		TestObjectLocalTime obj = jsonObjectMapper.fromJson(json, TestObjectLocalTime.class);
+		Assert.assertNotNull(obj);
 	}
 
 	@Test
@@ -59,7 +62,8 @@ public class JacksonJsonObjectMapperDeserializationTest {
 		String json = IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream("json/object-zoned-date-time.json"));
 
 		// WHEN
-		jsonObjectMapper.fromJson(json, TestObjectZonedDateTime.class);
+		TestObjectZonedDateTime obj = jsonObjectMapper.fromJson(json, TestObjectZonedDateTime.class);
+		System.out.println(obj);
 	}
 
 	@Test
@@ -80,7 +84,7 @@ public class JacksonJsonObjectMapperDeserializationTest {
 		// WHEN
 		TestObjectInstant obj = jsonObjectMapper.fromJson(json, TestObjectInstant.class);
 		Assert.assertNull(obj.getName());
-		Assert.assertNull(obj.getCreationDate());
+		Assert.assertNull(obj.getCreationDates());
 	}
 
 }

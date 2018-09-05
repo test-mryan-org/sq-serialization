@@ -1,4 +1,7 @@
 {
   "name":"object",
-  "creationDate":"2018-09-10"
+  "creationDates": [
+    "2018-09-10",
+    "2018-09-10T12:30:15"
+  ]
 }

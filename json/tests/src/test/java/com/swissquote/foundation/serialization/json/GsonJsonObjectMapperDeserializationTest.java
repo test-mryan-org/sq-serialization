@@ -14,7 +14,8 @@ public class GsonJsonObjectMapperDeserializationTest {
 		String json = IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream("json/object-java-util-date.json"));
 
 		// WHEN
-		jsonObjectMapper.fromJson(json, TestObjectJavaUtilDate.class);
+		TestObjectJavaUtilDate obj = jsonObjectMapper.fromJson(json, TestObjectJavaUtilDate.class);
+		System.out.println(obj);
 	}
 
 	@Test
@@ -59,7 +60,8 @@ public class GsonJsonObjectMapperDeserializationTest {
 		String json = IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream("json/object-zoned-date-time.json"));
 
 		// WHEN
-		jsonObjectMapper.fromJson(json, TestObjectZonedDateTime.class);
+		TestObjectZonedDateTime obj = jsonObjectMapper.fromJson(json, TestObjectZonedDateTime.class);
+		System.out.println(obj);
 	}
 
 	@Test
@@ -71,7 +73,7 @@ public class GsonJsonObjectMapperDeserializationTest {
 
 		TestObjectInstant obj = jsonObjectMapper.fromJson(json, TestObjectInstant.class);
 		Assert.assertNull(obj.getName());
-		Assert.assertNull(obj.getCreationDate());
+		Assert.assertNull(obj.getCreationDates());
 	}
 
 }

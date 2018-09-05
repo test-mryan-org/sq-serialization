@@ -12,6 +12,7 @@ import static com.swissquote.foundation.serialization.json.DateTestUtils.getLoca
 import static com.swissquote.foundation.serialization.json.DateTestUtils.getLocalTimeString;
 import static com.swissquote.foundation.serialization.json.DateTestUtils.getZonedDateTime;
 import static com.swissquote.foundation.serialization.json.DateTestUtils.getZonedDateTimeString;
+import static java.util.Collections.singletonList;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
@@ -34,7 +35,7 @@ public class GsonJsonObjectMapperSerializationTest {
 	@Test
 	public void testFromJavaUtilDate() throws Exception {
 		// GIVEN
-		TestObjectJavaUtilDate object = new TestObjectJavaUtilDate("object", getJavaUtilDate());
+		TestObjectJavaUtilDate object = new TestObjectJavaUtilDate("object", singletonList(getJavaUtilDate()));
 		TestObjectJavaUtilDate object2 = new TestObjectJavaUtilDate("object", null);
 
 		// WHEN
@@ -51,7 +52,7 @@ public class GsonJsonObjectMapperSerializationTest {
 	@Test
 	public void testFromInstant() throws Exception {
 		// GIVEN
-		TestObjectInstant object = new TestObjectInstant("object", getJavaUtilDate().toInstant());
+		TestObjectInstant object = new TestObjectInstant("object", singletonList(getJavaUtilDate().toInstant()));
 		TestObjectInstant object2 = new TestObjectInstant("object", null);
 
 		// WHEN
@@ -68,7 +69,7 @@ public class GsonJsonObjectMapperSerializationTest {
 	@Test
 	public void testFromLocalDate() throws Exception {
 		// GIVEN
-		TestObjectLocalDate object = new TestObjectLocalDate("object", getLocalDate());
+		TestObjectLocalDate object = new TestObjectLocalDate("object", singletonList(getLocalDate()));
 		TestObjectLocalDate object2 = new TestObjectLocalDate("object", null);
 
 		// WHEN
@@ -85,7 +86,7 @@ public class GsonJsonObjectMapperSerializationTest {
 	@Test
 	public void testFromLocalDateTime() throws Exception {
 		// GIVEN
-		TestObjectLocalDateTime object = new TestObjectLocalDateTime("object", getLocalDateTime());
+		TestObjectLocalDateTime object = new TestObjectLocalDateTime("object", singletonList(getLocalDateTime()));
 		TestObjectLocalDateTime object2 = new TestObjectLocalDateTime("object", null);
 
 		// WHEN
@@ -102,7 +103,7 @@ public class GsonJsonObjectMapperSerializationTest {
 	@Test
 	public void testFromLocalTime() throws Exception {
 		// GIVEN
-		TestObjectLocalTime object = new TestObjectLocalTime("object", getLocalTime());
+		TestObjectLocalTime object = new TestObjectLocalTime("object", singletonList(getLocalTime()));
 		TestObjectLocalTime object2 = new TestObjectLocalTime("object", null);
 
 		// WHEN
@@ -119,7 +120,7 @@ public class GsonJsonObjectMapperSerializationTest {
 	@Test
 	public void testFromZonedDateTime() throws Exception {
 		// GIVEN
-		TestObjectZonedDateTime object = new TestObjectZonedDateTime("object", getZonedDateTime());
+		TestObjectZonedDateTime object = new TestObjectZonedDateTime("object", singletonList(getZonedDateTime()));
 		TestObjectZonedDateTime object2 = new TestObjectZonedDateTime("object", null);
 
 		// WHEN

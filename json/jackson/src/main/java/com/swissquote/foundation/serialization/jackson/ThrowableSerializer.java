@@ -4,9 +4,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.BeanDescription;
 import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.SerializationConfig;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
@@ -22,7 +20,7 @@ public class ThrowableSerializer extends StdSerializer<Throwable> {
 
 	private final JsonSerializer<Throwable> defaultSerializer;
 
-	protected ThrowableSerializer(SerializationConfig config, BeanDescription beanDesc, JsonSerializer<?> defaultSerializer) {
+	protected ThrowableSerializer(JsonSerializer<?> defaultSerializer) {
 		super(Throwable.class);
 		this.defaultSerializer = (JsonSerializer<Throwable>) defaultSerializer;
 	}

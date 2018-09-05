@@ -2,7 +2,9 @@ package com.swissquote.foundation.serialization.gson.date;
 
 import java.lang.reflect.Type;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -26,6 +28,11 @@ public class LocalDateAdapter implements JsonSerializer<LocalDate>, JsonDeserial
 
 	@Override
 	public LocalDate deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-		return LocalDate.parse(json.getAsString(), DateTimeFormatter.ISO_LOCAL_DATE);
+		try {
+			return LocalDate.parse(json.getAsString(), DateTimeFormatter.ISO_LOCAL_DATE);
+		}
+		catch (DateTimeParseException e) {
+			return LocalDateTime.parse(json.getAsString(), DateTimeFormatter.ISO_LOCAL_DATE_TIME).toLocalDate();
+		}
 	}
 }

@@ -1,6 +1,7 @@
 package com.swissquote.foundation.serialization.json;
 
 import java.time.Instant;
+import java.util.List;
 
 import lombok.Value;
 
@@ -8,5 +9,5 @@ import lombok.Value;
 class TestValueInstant {
 
 	private String name;
-	private Instant creationDate;
+	private List<Instant> creationDates;
 }
