@@ -8,8 +8,6 @@ import java.io.OutputStreamWriter;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.nio.charset.Charset;
-import java.util.Iterator;
-import java.util.ServiceLoader;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
@@ -21,7 +19,8 @@ import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
 
-import com.swissquote.foundation.serialization.json.spi.JsonObjectMapper;
+import com.swissquote.foundation.serialization.json.JsonObjectMapper;
+import com.swissquote.foundation.serialization.json.JsonSerialization;
 
 @Provider
 @Consumes({MediaType.APPLICATION_JSON, "text/json"})
@@ -32,20 +31,7 @@ public class JsonObjectMapperProvider implements MessageBodyReader<Object>, Mess
 	private final JsonObjectMapper objectMapper;
 
 	public JsonObjectMapperProvider() {
-		ServiceLoader<JsonObjectMapper> service = ServiceLoader.load(JsonObjectMapper.class);
-		Iterator<JsonObjectMapper> iterator = service.iterator();
-
-		if (!iterator.hasNext()) {
-			throw new NullPointerException("No implementation of " + JsonObjectMapper.class.getName() + "found in META-INF");
-		}
-
-		JsonObjectMapper<?, ?> jsonObjectMapper = iterator.next();
-
-		if (iterator.hasNext()) {
-			throw new IllegalArgumentException("More than one implementation of " + JsonObjectMapper.class.getName() + "has been provided");
-		}
-
-		this.objectMapper = jsonObjectMapper;
+		this.objectMapper = JsonSerialization.getSerializationProvider().getJsonObjectMapper();
 	}
 
 	public static final Charset getCharset(final MediaType m) {

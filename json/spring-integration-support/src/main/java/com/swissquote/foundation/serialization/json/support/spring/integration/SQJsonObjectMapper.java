@@ -3,15 +3,15 @@ package com.swissquote.foundation.serialization.json.support.spring.integration;
 import java.io.Writer;
 import java.lang.reflect.Type;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.ServiceLoader;
 
 import org.springframework.integration.mapping.support.JsonHeaders;
+import org.springframework.integration.support.json.JsonObjectMapper;
 import org.springframework.integration.support.json.JsonObjectMapperAdapter;
 import org.springframework.util.ClassUtils;
 
-import com.swissquote.foundation.serialization.json.spi.JsonObjectMapper;
+import com.swissquote.foundation.serialization.json.JsonSerialization;
+import com.swissquote.foundation.serialization.json.spi.JsonSerializationProvider;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,18 +24,11 @@ public class SQJsonObjectMapper<N, P> extends JsonObjectMapperAdapter<N, P> {
 	private JsonObjectMapper<N, P> jsonObjectMapper;
 
 	public SQJsonObjectMapper() {
-		ServiceLoader<JsonObjectMapper> service = ServiceLoader.load(JsonObjectMapper.class);
-		Iterator<JsonObjectMapper> iterator = service.iterator();
+		this(JsonSerialization.getSerializationProvider());
+	}
 
-		if (!iterator.hasNext()) {
-			throw new NullPointerException("No implementation of " + JsonObjectMapper.class.getName() + "found in META-INF");
-		}
-
-		jsonObjectMapper = iterator.next();
-
-		if (iterator.hasNext()) {
-			throw new IllegalArgumentException("More than one implementation of " + JsonObjectMapper.class.getName() + "has been provided");
-		}
+	public SQJsonObjectMapper(JsonSerializationProvider provider) {
+		this.jsonObjectMapper = (JsonObjectMapper<N, P>) provider.getJsonObjectMapper();
 	}
 
 	public SQJsonObjectMapper(JsonObjectMapper<N, P> jsonObjectMapper) {

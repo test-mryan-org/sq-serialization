@@ -18,8 +18,6 @@ import static org.hamcrest.Matchers.not;
 import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.swissquote.foundation.serialization.json.spi.JacksonJsonObjectMapper;
-import com.swissquote.foundation.serialization.json.spi.JsonObjectMapper;
 
 import lombok.RequiredArgsConstructor;
 

@@ -1,4 +1,4 @@
-package com.swissquote.foundation.serialization.json.spi;
+package com.swissquote.foundation.serialization.json;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,6 +10,7 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -20,6 +21,7 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.swissquote.foundation.serialization.json.JsonObjectMapper;
 
 import lombok.Getter;
 
@@ -113,5 +115,15 @@ public class JacksonJsonObjectMapper implements JsonObjectMapper<JsonNode, JsonP
 	@Override
 	public <T> T fromParser(JsonParser parser, Type valueType) throws IOException {
 		return objectMapper.readValue(parser, objectMapper.constructType(valueType));
+	}
+
+	@Override
+	public <T> T unwrap(Class<T> cls) {
+		Objects.requireNonNull(cls, "argument cannot be null");
+		if (cls.isAssignableFrom(getClass())) {
+			return cls.cast(this);
+		}
+		throw new IllegalArgumentException("Unwapping to " + cls
+				+ " is not a supported by this implementation");
 	}
 }

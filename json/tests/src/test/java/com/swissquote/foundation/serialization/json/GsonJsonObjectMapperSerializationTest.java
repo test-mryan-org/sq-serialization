@@ -24,8 +24,6 @@ import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 
 import com.google.gson.Gson;
-import com.swissquote.foundation.serialization.json.spi.GsonJsonObjectMapper;
-import com.swissquote.foundation.serialization.json.spi.JsonObjectMapper;
 
 import lombok.RequiredArgsConstructor;
 

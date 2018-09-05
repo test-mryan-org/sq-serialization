@@ -1,6 +1,6 @@
 package com.swissquote.foundation.serialization.json;
 
-import static com.swissquote.foundation.serialization.json.spi.JsonObjectMapper.DATE_FORMAT_PATTERN;
+import static com.swissquote.foundation.serialization.json.JsonObjectMapper.DATE_FORMAT_PATTERN;
 import static java.time.ZoneId.systemDefault;
 
 import java.text.SimpleDateFormat;

@@ -1,4 +1,4 @@
-package com.swissquote.foundation.serialization.json.spi;
+package com.swissquote.foundation.serialization.json;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -16,6 +16,7 @@ import java.time.LocalTime;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Objects;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -42,11 +43,17 @@ public class GsonJsonObjectMapper implements JsonObjectMapper<JsonElement, Objec
 		this.builder = builder;
 		gson = builder.create();
 	}
-	/**
-	 * SQ pre-defined gson object
-	 */
+
 	public GsonJsonObjectMapper() {
-		this(new GsonBuilder()
+		this(standardGsonBuilder());
+
+	}
+
+	/**
+	 * SQ pre-defined GsonBuilder object
+	 */
+	public static GsonBuilder standardGsonBuilder() {
+		return new GsonBuilder()
 				.setDateFormat(DATE_FORMAT_PATTERN)
 				.registerTypeAdapter(Instant.class, new InstantAdapter())
 				.registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
@@ -55,13 +62,14 @@ public class GsonJsonObjectMapper implements JsonObjectMapper<JsonElement, Objec
 				.registerTypeAdapter(ZonedDateTime.class, new ZonedDateTimeAdapter())
 				.setExclusionStrategies(new ThrowableFieldsExclusionStrategy())
 				.enableComplexMapKeySerialization()
-				.serializeSpecialFloatingPointValues());
-
+				.serializeSpecialFloatingPointValues();
 	}
 
 	public GsonJsonObjectMapper registerTypeAdapter(Type type, Object adapter) {
-		builder.registerTypeAdapter(type, adapter);
-		gson = builder.create();
+		synchronized (builder) {
+			builder.registerTypeAdapter(type, adapter);
+			gson = builder.create();
+		}
 		return this;
 	}
 
@@ -137,6 +145,16 @@ public class GsonJsonObjectMapper implements JsonObjectMapper<JsonElement, Objec
 	@Override
 	public <T> T fromParser(Object parser, Type valueType) {
 		throw new UnsupportedOperationException("SQ Gson doesn't support JSON reader parser abstraction");
+	}
+
+	@Override
+	public <T> T unwrap(Class<T> cls) {
+		Objects.requireNonNull(cls, "argument cannot be null");
+		if (cls.isAssignableFrom(getClass())) {
+			return cls.cast(this);
+		}
+		throw new IllegalArgumentException("Unwapping to " + cls
+				+ " is not a supported by this implementation");
 	}
 
 }

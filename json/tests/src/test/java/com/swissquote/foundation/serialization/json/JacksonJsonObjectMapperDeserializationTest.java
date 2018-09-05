@@ -4,8 +4,6 @@ import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.swissquote.foundation.serialization.json.spi.JacksonJsonObjectMapper;
-
 public class JacksonJsonObjectMapperDeserializationTest {
 
 	private JacksonJsonObjectMapper jsonObjectMapper = new JacksonJsonObjectMapper();

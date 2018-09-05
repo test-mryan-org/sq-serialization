@@ -1,4 +1,4 @@
-package com.swissquote.foundation.serialization.json.spi;
+package com.swissquote.foundation.serialization.json;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -22,5 +22,7 @@ public interface JsonObjectMapper<N, P> {
 	<T> T fromJson(Object json, Type valueType) throws IOException;
 
 	<T> T fromParser(P parser, Type valueType) throws IOException;
+
+	<T> T unwrap(Class<T> cls);
 
 }
