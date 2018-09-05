@@ -28,7 +28,7 @@ import com.swissquote.foundation.serialization.json.JsonSerialization;
 public class JsonObjectMapperProvider implements MessageBodyReader<Object>, MessageBodyWriter<Object> {
 	private static final Charset UTF8 = Charset.forName("UTF-8");
 
-	private final JsonObjectMapper objectMapper;
+	private final JsonObjectMapper<?, ?> objectMapper;
 
 	public JsonObjectMapperProvider() {
 		this.objectMapper = JsonSerialization.getSerializationProvider().getJsonObjectMapper();
@@ -59,6 +59,7 @@ public class JsonObjectMapperProvider implements MessageBodyReader<Object>, Mess
 		httpHeaders.putSingle(HttpHeaders.CONTENT_TYPE, mediaType.withCharset(charset.name()).toString());
 
 		objectMapper.toJson(t, stream);
+
 		stream.flush();
 	}
 
