@@ -15,7 +15,6 @@ public class JacksonJsonObjectMapperDeserializationTest {
 
 		// WHEN
 		TestObjectJavaUtilDate obj = jsonObjectMapper.fromJson(json, TestObjectJavaUtilDate.class);
-		System.out.println(obj);
 	}
 
 	@Test
@@ -63,7 +62,6 @@ public class JacksonJsonObjectMapperDeserializationTest {
 
 		// WHEN
 		TestObjectZonedDateTime obj = jsonObjectMapper.fromJson(json, TestObjectZonedDateTime.class);
-		System.out.println(obj);
 	}
 
 	@Test

@@ -17,6 +17,7 @@ import com.google.gson.JsonSerializer;
  * at 01.Sep.2017
  */
 public class ZonedDateTimeAdapter implements JsonSerializer<ZonedDateTime>, JsonDeserializer<ZonedDateTime> {
+
 	@Override
 	public JsonElement serialize(ZonedDateTime zonedDateTime, Type typeOfSrc, JsonSerializationContext context) {
 		return new JsonPrimitive(zonedDateTime.format(DateTimeFormatter.ISO_DATE_TIME));

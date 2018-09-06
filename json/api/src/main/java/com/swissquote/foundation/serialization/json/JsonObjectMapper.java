@@ -9,8 +9,6 @@ import java.lang.reflect.Type;
  */
 public interface JsonObjectMapper<N, P> {
 
-	String DATE_FORMAT_PATTERN = "yyyy'-'MM'-'dd'T'HH':'mm':'ssZ";
-
 	String toJson(Object value) throws IOException;
 
 	void toJson(Object value, Writer writer) throws IOException;

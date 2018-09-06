@@ -44,9 +44,9 @@ public class JacksonJsonObjectMapperSerializationTest {
 		String originalJson = new ObjectMapper().writeValueAsString(object);
 
 		// THEN
-		with(SQJson).assertThat("creationDate", equalTo(getJavaUtilDateString()));
-		with(SQJson2).assertNotDefined("creationDate");
-		with(originalJson).assertThat("creationDate", not(getJavaUtilDateString()));
+		with(SQJson).assertThat("creationDates[0]", equalTo(getJavaUtilDateString()));
+		with(SQJson2).assertNotDefined("creationDates");
+		with(originalJson).assertThat("creationDates[0]", not(getJavaUtilDateString()));
 	}
 
 	@Test
@@ -61,9 +61,9 @@ public class JacksonJsonObjectMapperSerializationTest {
 		String originalJson = new ObjectMapper().writeValueAsString(object);
 
 		// THEN
-		with(SQJson).assertThat("creationDate", equalTo(getInstantString()));
-		with(SQJson2).assertNotDefined("creationDate");
-		with(originalJson).assertThat("creationDate", not(getInstantString()));
+		with(SQJson).assertThat("creationDates[0]", equalTo(getInstantString()));
+		with(SQJson2).assertNotDefined("creationDates");
+		with(originalJson).assertThat("creationDates[0]", not(getInstantString()));
 	}
 
 	@Test
@@ -78,9 +78,9 @@ public class JacksonJsonObjectMapperSerializationTest {
 		String originalJson = new ObjectMapper().writeValueAsString(object);
 
 		// THEN
-		with(SQJson).assertThat("creationDate", equalTo(getLocalDateString()));
-		with(SQJson2).assertNotDefined("creationDate");
-		with(originalJson).assertThat("creationDate", not(getLocalDateString()));
+		with(SQJson).assertThat("creationDates[0]", equalTo(getLocalDateString()));
+		with(SQJson2).assertNotDefined("creationDates");
+		with(originalJson).assertThat("creationDates[0]", not(getLocalDateString()));
 	}
 
 	@Test
@@ -95,9 +95,9 @@ public class JacksonJsonObjectMapperSerializationTest {
 		String originalJson = new ObjectMapper().writeValueAsString(object);
 
 		// THEN
-		with(SQJson).assertThat("creationDate", equalTo(getLocalDateTimeString()));
-		with(SQJson2).assertNotDefined("creationDate");
-		with(originalJson).assertThat("creationDate", not(getLocalDateTimeString()));
+		with(SQJson).assertThat("creationDates[0]", equalTo(getLocalDateTimeString()));
+		with(SQJson2).assertNotDefined("creationDates");
+		with(originalJson).assertThat("creationDates[0]", not(getLocalDateTimeString()));
 	}
 
 	@Test
@@ -112,9 +112,9 @@ public class JacksonJsonObjectMapperSerializationTest {
 		String originalJson = new ObjectMapper().writeValueAsString(object);
 
 		// THEN
-		with(SQJson).assertThat("creationDate", equalTo(getLocalTimeString()));
-		with(SQJson2).assertNotDefined("creationDate");
-		with(originalJson).assertThat("creationDate", not(getLocalTimeString()));
+		with(SQJson).assertThat("creationDates[0]", equalTo(getLocalTimeString()));
+		with(SQJson2).assertNotDefined("creationDates");
+		with(originalJson).assertThat("creationDates[0]", not(getLocalTimeString()));
 	}
 
 	@Test
@@ -129,9 +129,9 @@ public class JacksonJsonObjectMapperSerializationTest {
 		String originalJson = new ObjectMapper().writeValueAsString(object);
 
 		// THEN
-		with(SQJson).assertThat("creationDate", equalTo(getZonedDateTimeString()));
-		with(SQJson2).assertNotDefined("creationDate");
-		with(originalJson).assertThat("creationDate", not(getZonedDateTimeString()));
+		with(SQJson).assertThat("creationDates[0]", equalTo(getZonedDateTimeString()));
+		with(SQJson2).assertNotDefined("creationDates");
+		with(originalJson).assertThat("creationDates[0]", not(getZonedDateTimeString()));
 	}
 
 	@Test

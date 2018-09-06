@@ -16,12 +16,14 @@ import java.time.LocalTime;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Objects;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.swissquote.foundation.serialization.gson.ThrowableFieldsExclusionStrategy;
+import com.swissquote.foundation.serialization.gson.date.DateAdapter;
 import com.swissquote.foundation.serialization.gson.date.InstantAdapter;
 import com.swissquote.foundation.serialization.gson.date.LocalDateAdapter;
 import com.swissquote.foundation.serialization.gson.date.LocalDateTimeAdapter;
@@ -32,6 +34,9 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class GsonJsonObjectMapper implements JsonObjectMapper<JsonElement, Object> {
+
+	private static final String SERIALIZATION_DATE_FORMAT_PATTERN = "yyyy'-'MM'-'dd'T'HH':'mm':'ssZ";
+	private static final String DESERIALIZATION_DATE_FORMAT_PATTERN = "yyyy'-'MM'-'dd'T'HH':'mm':'ssX";
 
 	private static final Collection<Class<?>> supportedGsonJsonTypes =
 			Arrays.asList(String.class, byte[].class, char[].class, File.class, InputStream.class, Reader.class);
@@ -54,7 +59,8 @@ public class GsonJsonObjectMapper implements JsonObjectMapper<JsonElement, Objec
 	 */
 	public static GsonBuilder standardGsonBuilder() {
 		return new GsonBuilder()
-				.setDateFormat(DATE_FORMAT_PATTERN)
+				.setDateFormat(SERIALIZATION_DATE_FORMAT_PATTERN)
+				.registerTypeAdapter(Date.class, new DateAdapter(DESERIALIZATION_DATE_FORMAT_PATTERN))
 				.registerTypeAdapter(Instant.class, new InstantAdapter())
 				.registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
 				.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())

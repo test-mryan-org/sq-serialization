@@ -1,6 +1,5 @@
 package com.swissquote.foundation.serialization.json;
 
-import static com.swissquote.foundation.serialization.json.JsonObjectMapper.DATE_FORMAT_PATTERN;
 import static java.time.ZoneId.systemDefault;
 
 import java.text.SimpleDateFormat;
@@ -13,6 +12,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 class DateTestUtils {
+
+	private static final String DATE_FORMAT_PATTERN = "yyyy'-'MM'-'dd'T'HH':'mm':'ssZ";
 
 	private static Calendar givenCalendar;
 

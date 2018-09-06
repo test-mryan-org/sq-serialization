@@ -26,14 +26,13 @@ public class DateDeserializer extends StdDeserializer<Date> {
 	}
 
 	@Override
-	public Date deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+	public Date deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
 		JsonNode node = p.getCodec().readTree(p);
 		final String date = node.textValue();
 
 		for (String DATE_FORMAT : DATE_FORMATS) {
 			try {
-				Date parsedDate = new SimpleDateFormat(DATE_FORMAT).parse(date);
-				return parsedDate;
+				return new SimpleDateFormat(DATE_FORMAT).parse(date);
 			}
 			catch (ParseException e) {
 				System.out.println(e);

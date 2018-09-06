@@ -27,6 +27,8 @@ import lombok.Getter;
 
 public class JacksonJsonObjectMapper implements JsonObjectMapper<JsonNode, JsonParser> {
 
+	private static final String SERIALIZATION_DATE_FORMAT_PATTERN = "yyyy'-'MM'-'dd'T'HH':'mm':'ssZ";
+
 	private static final Collection<Class<?>> supportedJacksonJsonTypes =
 			Arrays.asList(String.class, byte[].class, File.class, URL.class, InputStream.class, Reader.class);
 
@@ -47,7 +49,7 @@ public class JacksonJsonObjectMapper implements JsonObjectMapper<JsonNode, JsonP
 
 	public static ObjectMapper standardObjectMapper() {
 		ObjectMapper objectMapper = new ObjectMapper()
-				.setDateFormat(new SimpleDateFormat(DATE_FORMAT_PATTERN))
+				.setDateFormat(new SimpleDateFormat(SERIALIZATION_DATE_FORMAT_PATTERN))
 				.configure(MapperFeature.DEFAULT_VIEW_INCLUSION, false)
 				.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
 				.setVisibility(PropertyAccessor.ALL, Visibility.NONE)
@@ -57,7 +59,6 @@ public class JacksonJsonObjectMapper implements JsonObjectMapper<JsonNode, JsonP
 				// new need to explicitly register the module
 				// https://github.com/FasterXML/jackson-modules-java8/blob/jackson-modules-java8-2.9.6/README.md#registering-modules
 				.registerModule(new JavaTimeModule());
-
 
 		return objectMapper;
 	}
