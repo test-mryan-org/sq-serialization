@@ -123,7 +123,10 @@ public class JacksonJsonObjectMapperDeserializationTest {
 		String json = IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream("json/object-instant.json"));
 
 		// WHEN
-		jsonObjectMapper.fromJson(json, TestValueInstant.class);
+		TestValueInstant obj = jsonObjectMapper.fromJson(json, TestValueInstant.class);
+
+		// THEN
+		assertNotNull(obj);
 	}
 
 	@Test
@@ -135,6 +138,18 @@ public class JacksonJsonObjectMapperDeserializationTest {
 		TestObjectInstant obj = jsonObjectMapper.fromJson(json, TestObjectInstant.class);
 		Assert.assertNull(obj.getName());
 		Assert.assertNull(obj.getCreationDates());
+	}
+
+	@Test
+	public void testToException() throws Exception {
+		// GIVEN
+		String json = IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream("json/exception.json"));
+
+		// WHEN
+		Exception obj = jsonObjectMapper.fromJson(json, Exception.class);
+
+		// THEN
+		assertNotNull(obj);
 	}
 
 }

@@ -120,10 +120,23 @@ public class GsonJsonObjectMapperDeserializationTest {
 		String json = IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream("json/object-instant_null.json"));
 
 		// WHEN
-
 		TestObjectInstant obj = jsonObjectMapper.fromJson(json, TestObjectInstant.class);
+
+		// THEN
 		assertNull(obj.getName());
 		assertNull(obj.getCreationDates());
+	}
+
+	@Test
+	public void testToException() throws Exception {
+		// GIVEN
+		String json = IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream("json/exception.json"));
+
+		// WHEN
+		Exception obj = jsonObjectMapper.fromJson(json, Exception.class);
+
+		// THEN
+		assertNotNull(obj);
 	}
 
 }

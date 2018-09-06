@@ -1,0 +1,9 @@
+{
+  "detailMessage": "client-exception",
+  "cause": {
+    "detailMessage": "java.lang.Exception: root",
+    "cause": {
+      "detailMessage": "root"
+    }
+  }
+}

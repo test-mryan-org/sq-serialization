@@ -52,7 +52,6 @@ public class GsonJsonObjectMapper implements JsonObjectMapper<JsonElement, Objec
 
 	public GsonJsonObjectMapper() {
 		this(standardGsonBuilder());
-
 	}
 
 	/**

@@ -160,7 +160,6 @@ public class GsonJsonObjectMapperSerializationTest {
 
 	@Test
 	public void testFromException() throws Exception {
-
 		// GIVEN
 		Exception exception = new Exception("client-exception", new Exception(new Exception("root")));
 		exception.addSuppressed(new Exception("suppressed"));
