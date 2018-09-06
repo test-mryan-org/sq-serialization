@@ -1,4 +1,4 @@
-package com.swissquote.foundation.serialization.json;
+package com.swissquote.foundation.serialization.json.model;
 
 import java.time.Instant;
 import java.util.List;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-class TestObjectInstant {
+public class TestObjectInstant {
 
 	private String name;
 	private List<Instant> creationDates;

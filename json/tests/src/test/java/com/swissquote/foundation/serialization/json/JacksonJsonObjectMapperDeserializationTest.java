@@ -12,6 +12,15 @@ import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.swissquote.foundation.serialization.json.model.TestObjectInstant;
+import com.swissquote.foundation.serialization.json.model.TestObjectJavaUtilDate;
+import com.swissquote.foundation.serialization.json.model.TestObjectLocalDate;
+import com.swissquote.foundation.serialization.json.model.TestObjectLocalDateTime;
+import com.swissquote.foundation.serialization.json.model.TestObjectLocalTime;
+import com.swissquote.foundation.serialization.json.model.TestObjectZonedDateTime;
+import com.swissquote.foundation.serialization.json.model.TestValueInstant;
+import com.swissquote.foundation.serialization.json.model.TestValueInstantMixin;
+
 @SuppressWarnings("Duplicates")
 public class JacksonJsonObjectMapperDeserializationTest {
 

@@ -1,4 +1,4 @@
-package com.swissquote.foundation.serialization.json;
+package com.swissquote.foundation.serialization.json.model;
 
 import java.util.Date;
 import java.util.List;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-class TestObjectJavaUtilDate {
+public class TestObjectJavaUtilDate {
 
 	private String name;
 	private List<Date> creationDates;

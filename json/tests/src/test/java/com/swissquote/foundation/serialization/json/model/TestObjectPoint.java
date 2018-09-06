@@ -1,4 +1,4 @@
-package com.swissquote.foundation.serialization.json;
+package com.swissquote.foundation.serialization.json.model;
 
 import lombok.Data;
 

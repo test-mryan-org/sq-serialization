@@ -1,6 +1,6 @@
-package com.swissquote.foundation.serialization.json;
+package com.swissquote.foundation.serialization.json.model;
 
-import java.time.LocalTime;
+import java.time.LocalDate;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-class TestObjectLocalTime {
+public class TestObjectLocalDate {
 
 	private String name;
-	private List<LocalTime> creationDates;
+	private List<LocalDate> creationDates;
 }

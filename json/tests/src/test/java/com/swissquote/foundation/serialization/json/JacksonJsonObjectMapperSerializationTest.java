@@ -25,6 +25,13 @@ import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.swissquote.foundation.serialization.json.model.TestObjectInstant;
+import com.swissquote.foundation.serialization.json.model.TestObjectJavaUtilDate;
+import com.swissquote.foundation.serialization.json.model.TestObjectLocalDate;
+import com.swissquote.foundation.serialization.json.model.TestObjectLocalDateTime;
+import com.swissquote.foundation.serialization.json.model.TestObjectLocalTime;
+import com.swissquote.foundation.serialization.json.model.TestObjectPoint;
+import com.swissquote.foundation.serialization.json.model.TestObjectZonedDateTime;
 
 import lombok.RequiredArgsConstructor;
 
@@ -128,7 +135,7 @@ public class JacksonJsonObjectMapperSerializationTest {
 		String SQJson2 = jsonObjectMapper.toJson(object2);
 		String originalJson = new ObjectMapper().writeValueAsString(object);
 
-		// THEN
+		// THENObjectMapper
 		with(SQJson).assertThat("creationDates[0]", equalTo(getZonedDateTimeString()));
 		with(SQJson2).assertNotDefined("creationDates");
 		with(originalJson).assertThat("creationDates[0]", not(getZonedDateTimeString()));
