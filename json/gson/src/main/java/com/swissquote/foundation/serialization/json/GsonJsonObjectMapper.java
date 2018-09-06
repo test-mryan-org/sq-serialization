@@ -33,6 +33,7 @@ import com.swissquote.foundation.serialization.gson.date.ZonedDateTimeAdapter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@SuppressWarnings("Duplicates")
 public class GsonJsonObjectMapper implements JsonObjectMapper<JsonElement, Object> {
 
 	private static final String SERIALIZATION_DATE_FORMAT_PATTERN = "yyyy'-'MM'-'dd'T'HH':'mm':'ssZ";

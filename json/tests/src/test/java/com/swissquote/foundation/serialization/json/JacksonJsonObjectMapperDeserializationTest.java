@@ -1,9 +1,18 @@
 package com.swissquote.foundation.serialization.json;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import java.time.ZoneId;
+import java.util.Calendar;
+import java.util.Date;
+
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
+@SuppressWarnings("Duplicates")
 public class JacksonJsonObjectMapperDeserializationTest {
 
 	private JacksonJsonObjectMapper jsonObjectMapper = new JacksonJsonObjectMapper();
@@ -15,6 +24,18 @@ public class JacksonJsonObjectMapperDeserializationTest {
 
 		// WHEN
 		TestObjectJavaUtilDate obj = jsonObjectMapper.fromJson(json, TestObjectJavaUtilDate.class);
+
+		// THEN
+		assertNotNull(obj);
+		assertTrue(obj.getCreationDates().get(0).compareTo(obj.getCreationDates().get(1)) == 0);
+		assertTrue(obj.getCreationDates().get(0).compareTo(obj.getCreationDates().get(2)) == 0);
+		assertTrue(obj.getCreationDates().get(0).compareTo(obj.getCreationDates().get(3)) == 0);
+		Calendar cal1 = Calendar.getInstance(), cal2 = Calendar.getInstance();
+		cal1.setTime(obj.getCreationDates().get(0));
+		cal2.setTime(obj.getCreationDates().get(4));
+		assertEquals(cal1.get(Calendar.YEAR), cal2.get(Calendar.YEAR));
+		assertEquals(cal1.get(Calendar.MONTH), cal2.get(Calendar.MONTH));
+		assertEquals(cal1.get(Calendar.DAY_OF_MONTH), cal2.get(Calendar.DAY_OF_MONTH));
 	}
 
 	@Test
@@ -23,7 +44,10 @@ public class JacksonJsonObjectMapperDeserializationTest {
 		String json = IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream("json/object-instant.json"));
 
 		// WHEN
-		jsonObjectMapper.fromJson(json, TestObjectInstant.class);
+		TestObjectInstant obj = jsonObjectMapper.fromJson(json, TestObjectInstant.class);
+
+		// THEN
+		assertNotNull(obj);
 	}
 
 	@Test
@@ -33,7 +57,15 @@ public class JacksonJsonObjectMapperDeserializationTest {
 
 		// WHEN
 		TestObjectLocalDate obj = jsonObjectMapper.fromJson(json, TestObjectLocalDate.class);
-		Assert.assertNotNull(obj);
+
+		// THEN
+		assertNotNull(obj);
+		Calendar cal1 = Calendar.getInstance(), cal2 = Calendar.getInstance();
+		cal1.setTime(Date.from(obj.getCreationDates().get(0).atStartOfDay(ZoneId.systemDefault()).toInstant()));
+		cal2.setTime(Date.from(obj.getCreationDates().get(1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
+		assertEquals(cal1.get(Calendar.YEAR), cal2.get(Calendar.YEAR));
+		assertEquals(cal1.get(Calendar.MONTH), cal2.get(Calendar.MONTH));
+		assertEquals(cal1.get(Calendar.DAY_OF_MONTH), cal2.get(Calendar.DAY_OF_MONTH));
 	}
 
 	@Test
@@ -42,7 +74,10 @@ public class JacksonJsonObjectMapperDeserializationTest {
 		String json = IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream("json/object-local-date-time.json"));
 
 		// WHEN
-		jsonObjectMapper.fromJson(json, TestObjectLocalDateTime.class);
+		TestObjectLocalDateTime obj = jsonObjectMapper.fromJson(json, TestObjectLocalDateTime.class);
+
+		// THEN
+		assertNotNull(obj);
 	}
 
 	@Test
@@ -52,7 +87,9 @@ public class JacksonJsonObjectMapperDeserializationTest {
 
 		// WHEN
 		TestObjectLocalTime obj = jsonObjectMapper.fromJson(json, TestObjectLocalTime.class);
-		Assert.assertNotNull(obj);
+
+		// THEN
+		assertNotNull(obj);
 	}
 
 	@Test
@@ -62,6 +99,12 @@ public class JacksonJsonObjectMapperDeserializationTest {
 
 		// WHEN
 		TestObjectZonedDateTime obj = jsonObjectMapper.fromJson(json, TestObjectZonedDateTime.class);
+
+		// THEN
+		assertNotNull(obj);
+		assertTrue(obj.getCreationDates().get(0).isEqual(obj.getCreationDates().get(1)));
+		assertTrue(obj.getCreationDates().get(0).isEqual(obj.getCreationDates().get(2)));
+		assertTrue(obj.getCreationDates().get(0).isEqual(obj.getCreationDates().get(3)));
 	}
 
 	@Test

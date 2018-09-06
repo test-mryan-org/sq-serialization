@@ -25,6 +25,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import lombok.Getter;
 
+@SuppressWarnings("Duplicates")
 public class JacksonJsonObjectMapper implements JsonObjectMapper<JsonNode, JsonParser> {
 
 	private static final String SERIALIZATION_DATE_FORMAT_PATTERN = "yyyy'-'MM'-'dd'T'HH':'mm':'ssZ";
