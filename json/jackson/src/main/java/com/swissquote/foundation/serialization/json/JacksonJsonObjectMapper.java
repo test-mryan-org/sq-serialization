@@ -47,6 +47,7 @@ public class JacksonJsonObjectMapper implements JsonObjectMapper<JsonNode, JsonP
 
 	public static ObjectMapper standardObjectMapper() {
 		ObjectMapper objectMapper = new ObjectMapper()
+				// fixme not thread safe
 				.setDateFormat(new SimpleDateFormat(DATE_FORMAT_PATTERN))
 				.configure(MapperFeature.DEFAULT_VIEW_INCLUSION, false)
 				.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
