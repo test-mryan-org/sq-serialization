@@ -126,8 +126,8 @@ public class SQJsonMessageConverter<N, P> implements MessageConverter {
 			classId = classIdFieldNameValue.toString();
 		}
 		if (classId == null) {
-			throw new MessageConversionException("failed to convert Message content. Could not resolve " +
-					DEFAULT_CLASSID_FIELD_NAME + " in header and no defaultType provided");
+			throw new MessageConversionException("failed to convert Message content. Could not resolve "
+					+ DEFAULT_CLASSID_FIELD_NAME + " in header and no defaultType provided");
 		}
 
 		if (classId.equals(DEFAULT_HASHTABLE_TYPE_ID)) {
