@@ -5,6 +5,7 @@ import java.util.Objects;
 import java.util.Properties;
 import java.util.WeakHashMap;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.swissquote.foundation.serialization.json.JacksonJsonObjectMapper;
 import com.swissquote.foundation.serialization.json.JsonObjectMapper;
 
@@ -43,6 +44,7 @@ public class JacksonJsonSerializationProvider implements JsonSerializationProvid
 	private JacksonJsonObjectMapper buildObjectMapper(Properties properties) {
 		// Currently only the standard object is return. In the future we may want to convert
 		// properties parameter -> ObjectMapper
-		return new JacksonJsonObjectMapper(JacksonJsonObjectMapper.standardObjectMapper());
+		ObjectMapper objectMapper = JacksonJsonObjectMapper.standardObjectMapper();
+		return new JacksonJsonObjectMapper(objectMapper.findAndRegisterModules());
 	}
 }
