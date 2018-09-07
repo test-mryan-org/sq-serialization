@@ -1,10 +1,9 @@
 package com.swissquote.foundation.serialization.json.support.spring.amqp;
 
-import com.swissquote.foundation.serialization.json.JsonObjectMapper;
-import com.swissquote.foundation.serialization.json.JsonSerialization;
-import com.swissquote.foundation.serialization.json.spi.JsonSerializationProvider;
-
-import lombok.extern.slf4j.Slf4j;
+import java.io.IOException;
+import java.util.Hashtable;
+import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageProperties;
@@ -12,10 +11,11 @@ import org.springframework.amqp.support.converter.MessageConversionException;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.util.ClassUtils;
 
-import java.io.IOException;
-import java.util.Hashtable;
-import java.util.Map;
-import java.util.UUID;
+import com.swissquote.foundation.serialization.json.JsonObjectMapper;
+import com.swissquote.foundation.serialization.json.JsonSerialization;
+import com.swissquote.foundation.serialization.json.spi.JsonSerializationProvider;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class SQJsonMessageConverter<N, P> implements MessageConverter {
