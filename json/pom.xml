@@ -13,8 +13,9 @@
 		<module>api</module>
 		<module>gson</module>
 		<module>jackson</module>
-		<module>spring-integration-support</module>
 		<module>jaxrs-support</module>
+        <module>spring-amqp-support</module>
+        <module>spring-integration-support</module>
 		<module>tests</module>
 	</modules>
 
