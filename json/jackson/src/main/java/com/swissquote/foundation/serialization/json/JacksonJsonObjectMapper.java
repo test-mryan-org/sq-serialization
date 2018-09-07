@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.swissquote.foundation.serialization.jackson.SQModule;
 
 import lombok.Getter;
 
@@ -60,7 +61,8 @@ public class JacksonJsonObjectMapper implements JsonObjectMapper<JsonNode, JsonP
 				.configure(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE, false)
 				// new need to explicitly register the module
 				// https://github.com/FasterXML/jackson-modules-java8/blob/jackson-modules-java8-2.9.6/README.md#registering-modules
-				.registerModule(new JavaTimeModule());
+				.registerModule(new JavaTimeModule())
+				.registerModule(new SQModule().enableComplexMapKeySerialization());
 
 		return objectMapper;
 	}

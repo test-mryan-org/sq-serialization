@@ -59,8 +59,12 @@ public class JsonObjectMapperProvider implements MessageBodyReader<Object>, Mess
 		httpHeaders.putSingle(HttpHeaders.CONTENT_TYPE, mediaType.withCharset(charset.name()).toString());
 
 		objectMapper.toJson(t, stream);
-
-		stream.flush();
+		try {
+			stream.flush();
+		}
+		catch (IOException e) {
+			// stream probably closed already
+		}
 	}
 
 	@Override
