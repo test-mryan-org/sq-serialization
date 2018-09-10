@@ -12,7 +12,6 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.core.type.WritableTypeId;
 import com.fasterxml.jackson.databind.BeanProperty;
-import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -104,7 +103,6 @@ public class ComplexKeyMapSerializer extends MapSerializer {
 	/*
 	 * Overrides Serialization mechanism when applicable
 	 */
-
 	@Override
 	public void serialize(Map<?, ?> value, JsonGenerator gen, SerializerProvider provider) throws IOException {
 		if (shouldSerializedAsListOfTuple(value, provider)) {
@@ -212,24 +210,11 @@ public class ComplexKeyMapSerializer extends MapSerializer {
 	/*
 	 * Utility methods used to dispatch the serialization behavior
 	 */
-
 	protected boolean complexKeyMapSerializationEnabled(SerializerProvider provider) {
 		return true;
 	}
 
-	protected boolean isKeySimpleType(Map<?, ?> value, SerializerProvider provider) {
-		// this is better not to use the first key found in the map to check the typing because
-		// the value could be null
-		//		Map.Entry<?, ?> entry = value.entrySet().iterator().next();
-		//		JavaType keyType = provider.getConfig().constructType(key.getClass());
-		JavaType keyType = provider.getConfig().constructType(value.getClass()).getKeyType();
-		Class<?> rawClass = keyType.getRawClass();
-		return keyType.isPrimitive()
-				|| keyType.isEnumType()
-				|| String.class.isAssignableFrom(rawClass)
-				|| Boolean.class.isAssignableFrom(rawClass)
-				|| Number.class.isAssignableFrom(rawClass);
-	}
+
 
 	protected boolean shouldSerializedAsListOfTuple(Map<?, ?> value, SerializerProvider provider) {
 		if (!complexKeyMapSerializationEnabled(provider)) {
@@ -241,7 +226,7 @@ public class ComplexKeyMapSerializer extends MapSerializer {
 		}
 
 		// check if the key is simple
-		if (isKeySimpleType(value, provider)) {
+		if (TypeUtils.isKeySimpleType(value, provider.getConfig())) {
 			return false;
 		}
 

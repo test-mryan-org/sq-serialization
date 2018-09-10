@@ -1,7 +1,6 @@
 package com.swissquote.foundation.serialization.jackson;
 
 import java.util.Date;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.fasterxml.jackson.databind.BeanDescription;
 import com.fasterxml.jackson.databind.DeserializationConfig;
@@ -17,14 +16,14 @@ import com.fasterxml.jackson.databind.type.MapType;
 
 public class SQModule extends SimpleModule {
 
-	private final AtomicBoolean enableComplexMapKeySerialization = new AtomicBoolean();
+	private boolean enableComplexMapKeySerialization;
 
 	public SQModule() {
 		super(PackageVersion.buildVersion());
 	}
 
 	public SQModule enableComplexMapKeySerialization() {
-		enableComplexMapKeySerialization.set(true);
+		enableComplexMapKeySerialization = true;
 		return this;
 	}
 
@@ -47,7 +46,7 @@ public class SQModule extends SimpleModule {
 			public JsonSerializer<?> modifyMapSerializer(SerializationConfig config, MapType valueType, BeanDescription beanDesc,
 					JsonSerializer<?> serializer) {
 
-				if (enableComplexMapKeySerialization.get()) {
+				if (enableComplexMapKeySerialization) {
 					return new ComplexKeyMapSerializer((MapSerializer) serializer, null, false);
 				}
 
@@ -71,7 +70,7 @@ public class SQModule extends SimpleModule {
 			public JsonDeserializer<?> modifyMapDeserializer(DeserializationConfig config, MapType type, BeanDescription beanDesc,
 					JsonDeserializer<?> deserializer) {
 
-				if (enableComplexMapKeySerialization.get()) {
+				if (enableComplexMapKeySerialization) {
 					return new ComplexKeyMapDeserializer((MapDeserializer) deserializer);
 				}
 
