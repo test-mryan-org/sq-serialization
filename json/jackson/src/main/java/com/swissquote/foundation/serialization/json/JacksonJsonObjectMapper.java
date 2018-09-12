@@ -10,6 +10,7 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Map;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
@@ -126,6 +127,16 @@ public class JacksonJsonObjectMapper implements JsonObjectMapper<JsonNode, JsonP
 	@Override
 	public <T> T fromParser(JsonParser parser, Type valueType) throws IOException {
 		return objectMapper.readValue(parser, objectMapper.constructType(valueType));
+	}
+
+	@Override
+	public Type constructCollectionType(Class<? extends Collection> collectionType, Class<?> contentClassType) {
+		return this.objectMapper.getTypeFactory().constructCollectionType(collectionType, contentClassType);
+	}
+
+	@Override
+	public Type constructMapType(Class<? extends Map> mapType, Class<?> keyClassType, Class<?> contentClassType) {
+		return this.objectMapper.getTypeFactory().constructMapType(mapType, keyClassType, contentClassType);
 	}
 
 	@Override

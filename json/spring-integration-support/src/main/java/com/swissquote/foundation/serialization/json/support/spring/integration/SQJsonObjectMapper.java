@@ -19,9 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 @SuppressWarnings("unchecked")
 public class SQJsonObjectMapper<N, P> extends JsonObjectMapperAdapter<N, P> {
 
-	private volatile ClassLoader classLoader = ClassUtils.getDefaultClassLoader();
-
 	private final JsonObjectMapper<N, P> jsonObjectMapper;
+	private volatile ClassLoader classLoader = ClassUtils.getDefaultClassLoader();
 
 	public SQJsonObjectMapper() {
 		this(JsonSerialization.getSerializationProvider());
@@ -62,13 +61,13 @@ public class SQJsonObjectMapper<N, P> extends JsonObjectMapperAdapter<N, P> {
 		Class<?> keyClassType = this.createJavaType(javaTypes, JsonHeaders.KEY_TYPE_ID);
 
 		if (keyClassType != null) {
-			log.warn("Gson doesn't support the Map 'key' conversion. Will be returned raw Map<String, Object>");
-			return (T) fromJson(json, Map.class);
+			return (T) jsonObjectMapper.fromJson(json,
+					jsonObjectMapper.constructMapType((Class<? extends Map>) classType, keyClassType, contentClassType));
 		}
 
 		if (contentClassType != null) {
-			log.warn("Gson doesn't support the Collection conversion. Will be returned raw Collection<Object>");
-			return (T) fromJson(json, Collection.class);
+			return (T) jsonObjectMapper.fromJson(json,
+					jsonObjectMapper.constructCollectionType((Class<? extends Collection>) classType, contentClassType));
 		}
 
 		return (T) fromJson(json, classType);
