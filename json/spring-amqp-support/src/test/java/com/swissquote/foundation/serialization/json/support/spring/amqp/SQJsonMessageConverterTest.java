@@ -38,7 +38,8 @@ public class SQJsonMessageConverterTest {
 		Map<String, Complex> map = new HashMap<>();
 		map.put("default", complex);
 
-		messageConverter.setType(new ParameterizedTypeReference<Map<String, Complex>>(){}.getType());
+		messageConverter.setType(new ParameterizedTypeReference<Map<String, Complex>>() {
+		}.getType());
 
 		Message message = messageConverter.toMessage(map, new MessageProperties());
 
@@ -58,7 +59,8 @@ public class SQJsonMessageConverterTest {
 		Map<Complex, String> map = new HashMap<>();
 		map.put(complex, "default");
 
-		messageConverter.setType(new ParameterizedTypeReference<Map<Complex, String>>(){}.getType());
+		messageConverter.setType(new ParameterizedTypeReference<Map<Complex, String>>() {
+		}.getType());
 
 		Message message = messageConverter.toMessage(map, new MessageProperties());
 
