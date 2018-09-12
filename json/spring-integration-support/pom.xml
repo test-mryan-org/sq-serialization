@@ -13,6 +13,7 @@
 		<sq.artifact.type>library</sq.artifact.type>
 
 		<spring-integration.version>4.3.16.RELEASE</spring-integration.version>
+		<spring.version>4.3.18.RELEASE</spring.version>
 	</properties>
 
 	<dependencies>
@@ -25,6 +26,18 @@
 			<groupId>org.springframework.integration</groupId>
 			<artifactId>spring-integration-core</artifactId>
 			<version>${spring-integration.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${spring.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.swissquote.foundation.serialization</groupId>
+			<artifactId>sq-serialization-json-gson</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 

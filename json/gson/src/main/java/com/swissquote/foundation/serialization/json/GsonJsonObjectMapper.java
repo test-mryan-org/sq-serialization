@@ -17,11 +17,13 @@ import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Map;
 import java.util.Objects;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
+import com.google.gson.reflect.TypeToken;
 import com.swissquote.foundation.serialization.gson.ThrowableFieldsExclusionStrategy;
 import com.swissquote.foundation.serialization.gson.date.DateAdapter;
 import com.swissquote.foundation.serialization.gson.date.InstantAdapter;
@@ -146,6 +148,16 @@ public class GsonJsonObjectMapper implements JsonObjectMapper<JsonElement, Objec
 			throw new IllegalArgumentException("'json' argument must be an instance of: " + supportedGsonJsonTypes
 					+ " , but gotten: " + json.getClass());
 		}
+	}
+
+	@Override
+	public Type constructCollectionType(Class<? extends Collection> collectionType, Class<?> contentClassType) {
+		return TypeToken.getParameterized(collectionType, contentClassType).getType();
+	}
+
+	@Override
+	public Type constructMapType(Class<? extends Map> mapType, Class<?> keyClassType, Class<?> contentClassType) {
+		return TypeToken.getParameterized(mapType, keyClassType, contentClassType).getType();
 	}
 
 	@Override

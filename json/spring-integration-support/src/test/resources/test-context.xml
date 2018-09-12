@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:int="http://www.springframework.org/schema/integration"
+	   xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
+	">
+
+	<int:channel id="inbound-channel"/>
+	<int:channel id="rabbitMQ-channel"/>
+	<int:channel id="outbound-channel"/>
+
+	<int:chain input-channel="inbound-channel" output-channel="rabbitMQ-channel">
+		<int:object-to-json-transformer object-mapper="objectMapper"/>
+	</int:chain>
+
+	<int:chain input-channel="rabbitMQ-channel" output-channel="outbound-channel">
+		<int:json-to-object-transformer object-mapper="objectMapper"/>
+	</int:chain>
+
+</beans>
