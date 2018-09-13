@@ -5,38 +5,76 @@ import java.lang.reflect.Type;
 
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageProperties;
-import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.amqp.support.converter.AbstractJsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConversionException;
-import org.springframework.amqp.support.converter.MessageConverter;
 
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.swissquote.foundation.serialization.json.JacksonJsonObjectMapper;
+import com.swissquote.foundation.serialization.json.JsonObjectMapper;
+import com.swissquote.foundation.serialization.json.JsonSerialization;
+import com.swissquote.foundation.serialization.json.spi.JsonSerializationProvider;
 
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class SQJsonMessageConverter implements MessageConverter {
+public class SQJsonMessageConverter<N, P> extends AbstractJsonMessageConverter {
 
 	@Setter
 	private Type type;
+	private TypeMapper typeMapper;
+	private boolean typeMapperSet;
 
-	private final Jackson2JsonMessageConverter jackson2JsonMessageConverter;
-	private final ObjectMapper objectMapper;
+	private final JsonObjectMapper<N, P> jsonObjectMapper;
 
 	public SQJsonMessageConverter() {
-		this(JacksonJsonObjectMapper.standardObjectMapper());
+		this(JsonSerialization.getSerializationProvider());
 	}
 
-	public SQJsonMessageConverter(ObjectMapper objectMapper) {
-		this.objectMapper = objectMapper;
-		jackson2JsonMessageConverter = new Jackson2JsonMessageConverter(objectMapper);
+	public SQJsonMessageConverter(JsonSerializationProvider provider) {
+		this.jsonObjectMapper = provider.getJsonObjectMapper();
+		setTypeMapper(new TypeMapper());
+	}
+
+	public SQJsonMessageConverter(JsonObjectMapper<N, P> jsonObjectMapper) {
+		this.jsonObjectMapper = jsonObjectMapper;
+		setTypeMapper(new TypeMapper());
+	}
+
+	public void setTypeMapper(TypeMapper typeMapper) {
+		this.typeMapper = typeMapper;
+		typeMapper.setJsonObjectMapper(jsonObjectMapper);
+		typeMapperSet = true;
 	}
 
 	@Override
-	public Message toMessage(Object object, MessageProperties messageProperties) throws MessageConversionException {
-		return jackson2JsonMessageConverter.toMessage(object, messageProperties);
+	public void setBeanClassLoader(ClassLoader classLoader) {
+		super.setBeanClassLoader(classLoader);
+		if (!typeMapperSet) {
+			typeMapper.setBeanClassLoader(classLoader);
+		}
+	}
+
+	@Override
+	protected Message createMessage(Object objectToConvert, MessageProperties messageProperties) {
+		byte[] bytes;
+		try {
+			String jsonString = jsonObjectMapper.toJson(objectToConvert);
+			bytes = jsonString.getBytes(getDefaultCharset());
+		}
+		catch (IOException e) {
+			throw new MessageConversionException("Failed to convert Message content", e);
+		}
+
+		messageProperties.setContentType(MessageProperties.CONTENT_TYPE_JSON);
+		messageProperties.setContentEncoding(getDefaultCharset());
+		messageProperties.setContentLength(bytes.length);
+
+		if (getClassMapper() == null) {
+			typeMapper.fromType(objectToConvert, messageProperties);
+		} else {
+			getClassMapper().fromClass(objectToConvert.getClass(), messageProperties);
+		}
+
+		return new Message(bytes, messageProperties);
 	}
 
 	@Override
@@ -48,20 +86,16 @@ public class SQJsonMessageConverter implements MessageConverter {
 			if (contentType != null && contentType.contains("json")) {
 				String encoding = properties.getContentEncoding();
 				if (encoding == null) {
-					encoding = jackson2JsonMessageConverter.getDefaultCharset();
+					encoding = DEFAULT_CHARSET;
 				}
 				try {
 					if (type != null) {
-						JavaType targetJavaType =
-								objectMapper.getTypeFactory().constructType(type);
-						content = convertBytesToObject(message.getBody(), encoding, targetJavaType);
-					} else if (jackson2JsonMessageConverter.getClassMapper() == null) {
-						JavaType targetJavaType =
-								jackson2JsonMessageConverter.getJavaTypeMapper().toJavaType(message.getMessageProperties());
+						content = convertBytesToObject(message.getBody(), encoding, type);
+					} else if (getClassMapper() == null) {
+						Type targetJavaType = typeMapper.toType(message.getMessageProperties());
 						content = convertBytesToObject(message.getBody(), encoding, targetJavaType);
 					} else {
-						Class<?> targetClass =
-								jackson2JsonMessageConverter.getClassMapper().toClass(message.getMessageProperties());
+						Class<?> targetClass = getClassMapper().toClass(message.getMessageProperties());
 						content = convertBytesToObject(message.getBody(), encoding, targetClass);
 					}
 				}
@@ -78,13 +112,13 @@ public class SQJsonMessageConverter implements MessageConverter {
 		return content;
 	}
 
-	private Object convertBytesToObject(byte[] body, String encoding, JavaType targetJavaType) throws IOException {
+	private Object convertBytesToObject(byte[] body, String encoding, Type targetType) throws IOException {
 		String contentAsString = new String(body, encoding);
-		return objectMapper.readValue(contentAsString, targetJavaType);
+		return jsonObjectMapper.fromJson(contentAsString, targetType);
 	}
 
 	private Object convertBytesToObject(byte[] body, String encoding, Class<?> targetClass) throws IOException {
 		String contentAsString = new String(body, encoding);
-		return objectMapper.readValue(contentAsString, objectMapper.constructType(targetClass));
+		return jsonObjectMapper.fromJson(contentAsString, targetClass);
 	}
 }

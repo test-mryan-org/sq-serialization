@@ -38,6 +38,24 @@ public class SQJsonMessageConverterTest {
 		Map<String, Complex> map = new HashMap<>();
 		map.put("default", complex);
 
+		Message message = messageConverter.toMessage(map, new MessageProperties());
+
+		Map<String, Complex> fromMessage = (Map<String, Complex>) messageConverter.fromMessage(message);
+
+		assertThat(fromMessage, Matchers.allOf(
+				Matchers.notNullValue(),
+				Matchers.hasEntry("default", complex)
+		));
+		assertEquals("nom", fromMessage.get("default").getName());
+		assertEquals(2, fromMessage.get("default").getCount());
+	}
+
+	@Test
+	public void roundMapWithTypeTest() {
+		Complex complex = new Complex("nom", 2);
+		Map<String, Complex> map = new HashMap<>();
+		map.put("default", complex);
+
 		messageConverter.setType(new ParameterizedTypeReference<Map<String, Complex>>() {
 		}.getType());
 
