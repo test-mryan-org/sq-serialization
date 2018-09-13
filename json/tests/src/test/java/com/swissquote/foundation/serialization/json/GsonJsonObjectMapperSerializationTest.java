@@ -147,7 +147,7 @@ public class GsonJsonObjectMapperSerializationTest {
 		Map<TestObjectPoint, String> points = new HashMap<>();
 		points.put(new TestObjectPoint(5, 2), "p1");
 		points.put(new TestObjectPoint(4, 15), "p2");
-		String expectedJson = IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream("json/object-point.json"));
+		String expectedJson = IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream("json/object-mapPointsAsKeys.json"));
 
 		// WHEN
 		String SQJson = jsonObjectMapper.toJson(points);

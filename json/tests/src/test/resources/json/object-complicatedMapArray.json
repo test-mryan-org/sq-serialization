@@ -1,0 +1,20 @@
+{
+  "complicatedMap": [
+    [
+      {
+        "stringField": "Hello",
+        "longField": 123,
+        "bdField": "123.4"
+      },
+      "Hello"
+    ],
+    [
+      {
+        "stringField": "World",
+        "longField": 321,
+        "bdField": "4.321"
+      },
+      "World"
+    ]
+  ]
+}

@@ -135,7 +135,7 @@ public class JacksonJsonObjectMapperSerializationTest {
 		String SQJson2 = jsonObjectMapper.toJson(object2);
 		String originalJson = new ObjectMapper().writeValueAsString(object);
 
-		// THENObjectMapper
+		// THEN
 		with(SQJson).assertThat("creationDates[0]", equalTo(getZonedDateTimeString()));
 		with(SQJson2).assertNotDefined("creationDates");
 		with(originalJson).assertThat("creationDates[0]", not(getZonedDateTimeString()));
@@ -147,7 +147,7 @@ public class JacksonJsonObjectMapperSerializationTest {
 		Map<TestObjectPoint, String> points = new HashMap<>();
 		points.put(new TestObjectPoint(5, 2), "p1");
 		points.put(new TestObjectPoint(4, 15), "p2");
-		String expectedJson = IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream("json/object-point.json"));
+		String expectedJson = IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream("json/object-mapPointsAsKeys.json"));
 
 		// WHEN
 		String SQJson = jsonObjectMapper.toJson(points);

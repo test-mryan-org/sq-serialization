@@ -5,20 +5,28 @@ import static com.swissquote.foundation.serialization.json.DateTestUtils.getLoca
 import static com.swissquote.foundation.serialization.json.DateTestUtils.getLocalDateTime;
 import static com.swissquote.foundation.serialization.json.DateTestUtils.getLocalTime;
 import static com.swissquote.foundation.serialization.json.DateTestUtils.getZonedDateTime;
+import static com.swissquote.foundation.serialization.json.values.TestValues.STRING_HELLO;
+import static com.swissquote.foundation.serialization.json.values.TestValues.TF_HELLO;
+import static com.swissquote.foundation.serialization.json.values.TestValues.TF_WORLD;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.Type;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Test;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.exc.InvalidDefinitionException;
 import com.google.gson.reflect.TypeToken;
 import com.swissquote.foundation.serialization.json.model.TestObjectInstant;
 import com.swissquote.foundation.serialization.json.model.TestObjectJavaUtilDate;
@@ -27,6 +35,7 @@ import com.swissquote.foundation.serialization.json.model.TestObjectLocalDateTim
 import com.swissquote.foundation.serialization.json.model.TestObjectLocalTime;
 import com.swissquote.foundation.serialization.json.model.TestObjectPoint;
 import com.swissquote.foundation.serialization.json.model.TestObjectZonedDateTime;
+import com.swissquote.foundation.serialization.json.model.TestThreeFields;
 
 public class GsonJacksonObjectMapperTest {
 
@@ -246,7 +255,7 @@ public class GsonJacksonObjectMapperTest {
 		));
 	}
 
-	@Test
+	@Test(expected = InvalidDefinitionException.class)
 	public void testComplexMap() throws Exception {
 		TestObjectPoint k1 = new TestObjectPoint(1, 2);
 		TestObjectPoint k2 = new TestObjectPoint(3, 4);
@@ -268,14 +277,68 @@ public class GsonJacksonObjectMapperTest {
 		// Serialization with Gson
 		String gsonString = gsonObjectMapper.toJson(object);
 
-		// Deserialization with Jackson
+		// Deserialization with Jackson -> Will fail because no Mixin was set for TestObjectPoint and it lacks a Creator
 		Map<TestObjectPoint, Integer> jacksonObject = jacksonObjectMapper.fromJson(gsonString, typeOfMap);
+	}
+
+	@Test
+	public void testComplexMapThreeFields() throws Exception {
+		TestThreeFields k1 = new TestThreeFields("Foo", 42L, new BigDecimal("42"));
+		TestThreeFields k2 = new TestThreeFields("Bar", 1337L, new BigDecimal("1337"));
+
+		Integer v1 = new Integer(1);
+		Integer v2 = new Integer(2);
+
+		Map<TestThreeFields, Integer> object = mapOf(k1, v1, k2, v2);
+		Type typeOfMap = TypeToken.getParameterized(Map.class, TestThreeFields.class, Integer.class).getType();
+
+		// Serialization with Jackson
+		String jacksonString = jacksonObjectMapper.toJson(object);
+
+		// Deserialization with Gson
+		Map<TestThreeFields, Integer> gsonObject = gsonObjectMapper.fromJson(jacksonString, typeOfMap);
+		assertNotNull(gsonObject);
+		assertTrue(gsonObject.size() == 2);
+		assertThat(gsonObject, allOf(
+				hasEntry(k1, v1),
+				hasEntry(k2, v2)
+		));
+
+		// Serialization with Gson
+		String gsonString = gsonObjectMapper.toJson(object);
+
+		// Deserialization with Jackson
+		Map<TestThreeFields, Integer> jacksonObject = jacksonObjectMapper.fromJson(gsonString, typeOfMap);
 		assertNotNull(jacksonObject);
 		assertTrue(jacksonObject.size() == 2);
 		assertThat(jacksonObject, allOf(
-				hasEntry(k1, 1),
-				hasEntry(k2, 2)
+				hasEntry(k1, v1),
+				hasEntry(k2, v2)
 		));
+
+	}
+
+	@Test
+	public void testEmptyComplexMap() throws Exception {
+
+		Map<TestThreeFields, Integer> object = new HashMap<>();
+		Type typeOfMap = TypeToken.getParameterized(Map.class, TestThreeFields.class, Integer.class).getType();
+
+		// Serialization with Jackson
+		String jacksonString = jacksonObjectMapper.toJson(object);
+
+		// Deserialization with Gson
+		Map<TestThreeFields, Integer> gsonObject = gsonObjectMapper.fromJson(jacksonString, typeOfMap);
+		assertNotNull(gsonObject);
+		assertTrue(gsonObject.size() == 0);
+
+		// Serialization with Gson
+		String gsonString = gsonObjectMapper.toJson(object);
+
+		// Deserialization with Jackson
+		Map<TestThreeFields, Integer> jacksonObject = jacksonObjectMapper.fromJson(gsonString, typeOfMap);
+		assertNotNull(jacksonObject);
+		assertTrue(jacksonObject.size() == 0);
 
 	}
 
@@ -297,5 +360,6 @@ public class GsonJacksonObjectMapperTest {
 		Exception gsonObject = gsonObjectMapper.fromJson(jacksonString, Exception.class);
 		assertNotNull(gsonObject);
 	}
+
 
 }
