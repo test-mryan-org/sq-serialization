@@ -9,7 +9,6 @@ import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.support.converter.ClassMapper;
 import org.springframework.amqp.support.converter.MessageConversionException;
 import org.springframework.beans.factory.BeanClassLoaderAware;
-import org.springframework.integration.mapping.support.JsonHeaders;
 import org.springframework.util.ClassUtils;
 
 import com.swissquote.foundation.serialization.json.JsonObjectMapper;
@@ -18,9 +17,9 @@ import lombok.Setter;
 
 public class TypeMapper implements ClassMapper, BeanClassLoaderAware {
 
-	private static final String CLASS_ID_FIELD_NAME = JsonHeaders.TYPE_ID;
-	private static final String CONTENT_CLASS_ID_FIELD_NAME = JsonHeaders.CONTENT_TYPE_ID;
-	private static final String KEY_CLASS_ID_FIELD_NAME = JsonHeaders.KEY_TYPE_ID;
+	private static final String CLASS_ID_FIELD_NAME = "json__TypeId__";
+	private static final String CONTENT_CLASS_ID_FIELD_NAME = "json__ContentTypeId__";
+	private static final String KEY_CLASS_ID_FIELD_NAME = "json__KeyTypeId__";
 
 	@Setter
 	private JsonObjectMapper jsonObjectMapper;

@@ -11,6 +11,7 @@
 
 	<properties>
 		<sq.artifact.type>library</sq.artifact.type>
+		<logback-classic.version>1.2.3</logback-classic.version>
 	</properties>
 
 	<dependencies>
@@ -27,7 +28,7 @@
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
-			<version>1.2.3</version>
+			<version>${logback-classic.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

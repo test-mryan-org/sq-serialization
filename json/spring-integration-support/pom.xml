@@ -11,16 +11,30 @@
 
 	<properties>
 		<sq.artifact.type>library</sq.artifact.type>
-
-		<spring-integration.version>4.3.16.RELEASE</spring-integration.version>
-		<spring.version>4.3.18.RELEASE</spring.version>
 	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-core</artifactId>
+				<!-- because spring integration is not 4.3.19 yet -->
+				<version>4.3.18.RELEASE</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<dependencies>
 		<dependency>
 			<groupId>com.swissquote.foundation.serialization</groupId>
 			<artifactId>sq-serialization-json-api</artifactId>
 			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.swissquote.foundation.serialization</groupId>
+			<artifactId>sq-serialization-json-gson</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.integration</groupId>
@@ -33,12 +47,7 @@
 			<version>${spring.version}</version>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>com.swissquote.foundation.serialization</groupId>
-			<artifactId>sq-serialization-json-gson</artifactId>
-			<version>${project.version}</version>
-			<scope>test</scope>
-		</dependency>
+
 	</dependencies>
 
 </project>

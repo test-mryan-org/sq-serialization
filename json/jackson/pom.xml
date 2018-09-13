@@ -12,8 +12,6 @@
 
 	<properties>
 		<sq.artifact.type>library</sq.artifact.type>
-
-		<jackson.version>2.9.6</jackson.version>
 	</properties>
 
 	<dependencies>

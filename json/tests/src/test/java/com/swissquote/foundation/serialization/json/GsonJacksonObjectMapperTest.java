@@ -6,15 +6,12 @@ import static com.swissquote.foundation.serialization.json.DateTestUtils.getLoca
 import static com.swissquote.foundation.serialization.json.DateTestUtils.getLocalTime;
 import static com.swissquote.foundation.serialization.json.DateTestUtils.getZonedDateTime;
 import static com.swissquote.foundation.serialization.json.values.TestValues.STRING_HELLO;
-import static com.swissquote.foundation.serialization.json.values.TestValues.TF_HELLO;
-import static com.swissquote.foundation.serialization.json.values.TestValues.TF_WORLD;
+import static com.swissquote.foundation.serialization.json.values.TestValues.STRING_WORLD;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -25,7 +22,6 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.exc.InvalidDefinitionException;
 import com.google.gson.reflect.TypeToken;
 import com.swissquote.foundation.serialization.json.model.TestObjectInstant;
@@ -319,6 +315,45 @@ public class GsonJacksonObjectMapperTest {
 	}
 
 	@Test
+	public void testMapSimpleKeyComplexValue() throws Exception {
+		TestThreeFields val1 = new TestThreeFields("Foo", 42L, new BigDecimal("42"));
+		TestThreeFields val2 = new TestThreeFields("Bar", 1337L, new BigDecimal("1337"));
+
+		Map<String, TestThreeFields> object = mapOf(STRING_HELLO, val1, STRING_WORLD, val2);
+		Type typeOfMap = TypeToken.getParameterized(Map.class, String.class, TestThreeFields.class).getType();
+
+		// Serialization with Jackson
+		String jacksonString = jacksonObjectMapper.toJson(object);
+
+		System.out.println(jacksonString);
+
+		// Deserialization with Gson
+		Map<String, TestThreeFields> gsonObject = gsonObjectMapper.fromJson(jacksonString, typeOfMap);
+		gsonObject.entrySet().stream().forEach(System.out::println);
+		assertNotNull(gsonObject);
+		assertTrue(gsonObject.size() == 2);
+		assertThat(gsonObject, allOf(
+				hasEntry(STRING_HELLO, val1),
+				hasEntry(STRING_WORLD, val2)
+		));
+
+		// Serialization with Gson
+		String gsonString = gsonObjectMapper.toJson(object);
+		System.out.println(gsonString);
+
+		// Deserialization with Jackson
+		Map<String, TestThreeFields> jacksonObject = jacksonObjectMapper.fromJson(jacksonString, typeOfMap);
+		jacksonObject.entrySet().stream().forEach(System.out::println);
+		assertNotNull(jacksonObject);
+		assertTrue(jacksonObject.size() == 2);
+		assertThat(jacksonObject, allOf(
+				hasEntry(STRING_HELLO, val1),
+				hasEntry(STRING_WORLD, val2)
+		));
+
+	}
+
+	@Test
 	public void testEmptyComplexMap() throws Exception {
 
 		Map<TestThreeFields, Integer> object = new HashMap<>();
@@ -343,6 +378,30 @@ public class GsonJacksonObjectMapperTest {
 	}
 
 	@Test
+	public void testEmptySimpleKeyComplexValueMap() throws Exception {
+
+		Map<Integer, TestThreeFields> object = new HashMap<>();
+		Type typeOfMap = TypeToken.getParameterized(Map.class, Integer.class, TestThreeFields.class).getType();
+
+		// Serialization with Jackson
+		String jacksonString = jacksonObjectMapper.toJson(object);
+
+		// Deserialization with Gson
+		Map<Integer, TestThreeFields> gsonObject = gsonObjectMapper.fromJson(jacksonString, typeOfMap);
+		assertNotNull(gsonObject);
+		assertTrue(gsonObject.size() == 0);
+
+		// Serialization with Gson
+		String gsonString = gsonObjectMapper.toJson(object);
+
+		// Deserialization with Jackson
+		Map<Integer, TestThreeFields> jacksonObject = jacksonObjectMapper.fromJson(gsonString, typeOfMap);
+		assertNotNull(jacksonObject);
+		assertTrue(jacksonObject.size() == 0);
+
+	}
+
+	@Test
 	public void testFromException() throws Exception {
 		Exception exception = new Exception("client-exception", new Exception(new Exception("root")));
 
@@ -360,6 +419,5 @@ public class GsonJacksonObjectMapperTest {
 		Exception gsonObject = gsonObjectMapper.fromJson(jacksonString, Exception.class);
 		assertNotNull(gsonObject);
 	}
-
 
 }
