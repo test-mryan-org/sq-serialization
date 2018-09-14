@@ -77,7 +77,7 @@ public class ComplexKeyMapDeserializer extends MapDeserializer {
 
 		// maybe we can throw an exception instead of putting a null as keyDeser
 
-		return new ComplexKeyMapDeserializer((MapDeserializer) this, null, (JsonDeserializer<Object>) valueDeser, valueTypeDeser, nuller,
+		return new ComplexKeyMapDeserializer((MapDeserializer) this, keyDeser, (JsonDeserializer<Object>) valueDeser, valueTypeDeser, nuller,
 				ignorable);
 	}
 

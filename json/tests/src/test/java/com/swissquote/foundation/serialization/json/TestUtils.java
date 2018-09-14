@@ -10,8 +10,10 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
-class DateTestUtils {
+class TestUtils {
 
 	private static final String DATE_FORMAT_PATTERN = "yyyy'-'MM'-'dd'T'HH':'mm':'ssZ";
 
@@ -70,6 +72,13 @@ class DateTestUtils {
 
 	static String getZonedDateTimeString() {
 		return getZonedDateTime().format(DateTimeFormatter.ISO_DATE_TIME);
+	}
+
+	static <K, V> Map<K, V> mapOf(K k1, V v1, K k2, V v2) {
+		Map<K, V> map = new HashMap<>();
+		map.put(k1, v1);
+		map.put(k2, v2);
+		return map;
 	}
 
 }

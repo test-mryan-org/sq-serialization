@@ -1,17 +1,17 @@
 package com.swissquote.foundation.serialization.json;
 
 import static com.jayway.jsonassert.JsonAssert.with;
-import static com.swissquote.foundation.serialization.json.DateTestUtils.getInstantString;
-import static com.swissquote.foundation.serialization.json.DateTestUtils.getJavaUtilDate;
-import static com.swissquote.foundation.serialization.json.DateTestUtils.getJavaUtilDateString;
-import static com.swissquote.foundation.serialization.json.DateTestUtils.getLocalDate;
-import static com.swissquote.foundation.serialization.json.DateTestUtils.getLocalDateString;
-import static com.swissquote.foundation.serialization.json.DateTestUtils.getLocalDateTime;
-import static com.swissquote.foundation.serialization.json.DateTestUtils.getLocalDateTimeString;
-import static com.swissquote.foundation.serialization.json.DateTestUtils.getLocalTime;
-import static com.swissquote.foundation.serialization.json.DateTestUtils.getLocalTimeString;
-import static com.swissquote.foundation.serialization.json.DateTestUtils.getZonedDateTime;
-import static com.swissquote.foundation.serialization.json.DateTestUtils.getZonedDateTimeString;
+import static com.swissquote.foundation.serialization.json.TestUtils.getInstantString;
+import static com.swissquote.foundation.serialization.json.TestUtils.getJavaUtilDate;
+import static com.swissquote.foundation.serialization.json.TestUtils.getJavaUtilDateString;
+import static com.swissquote.foundation.serialization.json.TestUtils.getLocalDate;
+import static com.swissquote.foundation.serialization.json.TestUtils.getLocalDateString;
+import static com.swissquote.foundation.serialization.json.TestUtils.getLocalDateTime;
+import static com.swissquote.foundation.serialization.json.TestUtils.getLocalDateTimeString;
+import static com.swissquote.foundation.serialization.json.TestUtils.getLocalTime;
+import static com.swissquote.foundation.serialization.json.TestUtils.getLocalTimeString;
+import static com.swissquote.foundation.serialization.json.TestUtils.getZonedDateTime;
+import static com.swissquote.foundation.serialization.json.TestUtils.getZonedDateTimeString;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;

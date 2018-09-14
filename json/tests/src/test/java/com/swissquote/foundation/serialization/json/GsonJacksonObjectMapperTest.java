@@ -1,10 +1,11 @@
 package com.swissquote.foundation.serialization.json;
 
-import static com.swissquote.foundation.serialization.json.DateTestUtils.getJavaUtilDate;
-import static com.swissquote.foundation.serialization.json.DateTestUtils.getLocalDate;
-import static com.swissquote.foundation.serialization.json.DateTestUtils.getLocalDateTime;
-import static com.swissquote.foundation.serialization.json.DateTestUtils.getLocalTime;
-import static com.swissquote.foundation.serialization.json.DateTestUtils.getZonedDateTime;
+import static com.swissquote.foundation.serialization.json.TestUtils.getJavaUtilDate;
+import static com.swissquote.foundation.serialization.json.TestUtils.getLocalDate;
+import static com.swissquote.foundation.serialization.json.TestUtils.getLocalDateTime;
+import static com.swissquote.foundation.serialization.json.TestUtils.getLocalTime;
+import static com.swissquote.foundation.serialization.json.TestUtils.getZonedDateTime;
+import static com.swissquote.foundation.serialization.json.TestUtils.mapOf;
 import static com.swissquote.foundation.serialization.json.values.TestValues.STRING_HELLO;
 import static com.swissquote.foundation.serialization.json.values.TestValues.STRING_WORLD;
 import static java.util.Collections.singletonList;
@@ -164,13 +165,6 @@ public class GsonJacksonObjectMapperTest {
 		assertTrue(gsonObject.getCreationDates().get(0).compareTo(getZonedDateTime()) == 0);
 	}
 
-	private <K, V> Map<K, V> mapOf(K k1, V v1, K k2, V v2) {
-		Map<K, V> map = new HashMap<>();
-		map.put(k1, v1);
-		map.put(k2, v2);
-		return map;
-	}
-
 	@Test
 	public void testSimpleMap() throws Exception {
 		Map<String, Integer> object = mapOf("k1", 1, "k2", 2);
@@ -204,7 +198,7 @@ public class GsonJacksonObjectMapperTest {
 
 	@Test
 	public void testSimpleIntegerMap() throws Exception {
-		Map<Integer, Integer> object = mapOf(1, 1, 1, 2);
+		Map<Integer, Integer> object = mapOf(1, 1, 2, 2);
 		Type typeOfMap = TypeToken.getParameterized(Map.class, Integer.class, Integer.class).getType();
 
 		// Serialization with Jackson
@@ -228,9 +222,8 @@ public class GsonJacksonObjectMapperTest {
 		assertTrue(jacksonObject.size() == 2);
 		assertThat(jacksonObject, allOf(
 				hasEntry(1, 1),
-				hasEntry(1, 2)
+				hasEntry(2, 2)
 		));
-
 	}
 
 	@Test

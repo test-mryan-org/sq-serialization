@@ -6,9 +6,12 @@ import static com.swissquote.foundation.serialization.json.values.TestValues.STR
 import static com.swissquote.foundation.serialization.json.values.TestValues.STRING_WORLD;
 import static com.swissquote.foundation.serialization.json.values.TestValues.TF_HELLO;
 import static com.swissquote.foundation.serialization.json.values.TestValues.TF_WORLD;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.hasEntry;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.Type;
@@ -20,7 +23,6 @@ import java.util.Map;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.exc.InvalidDefinitionException;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.google.gson.reflect.TypeToken;
@@ -401,6 +403,58 @@ public class JacksonJsonObjectMapperDeserializationTest {
 		assertEquals(map.get(TF_HELLO), STRING_HELLO);
 		assertEquals(map.get(TF_WORLD), STRING_WORLD);
 
+	}
+
+	@Test
+	public void testMultipleKind() throws Exception {
+
+		// Complex deserialization
+		String complexJson = IOUtils.toString(
+				this.getClass().getClassLoader().getResourceAsStream("json/object-mapComplexKeyComplexValueAsArray.json"));
+		Type complexType = new TypeToken<Map<TestThreeFields, TestThreeFields>>() {
+		}.getType();
+
+		Map<TestThreeFields, TestThreeFields> map = jsonObjectMapper.fromJson(complexJson, complexType);
+
+		assertNotNull(map);
+		assertEquals(map.size(), 2);
+		assertThat(map, allOf(
+				hasEntry(TF_HELLO, TF_WORLD),
+				hasEntry(TF_WORLD, TF_HELLO)
+		));
+
+		// Standard deserialization with integer key
+
+		String json = IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream("json/object-map.json"));
+		Type typeOfMapInteger = TypeToken.getParameterized(Map.class, Integer.class, Integer.class).getType();
+		Map<Integer, Integer> integerMap = jsonObjectMapper.fromJson(json, typeOfMapInteger);
+		assertNotNull(integerMap);
+		assertTrue(integerMap.size() == 2);
+		assertThat(integerMap, allOf(
+				hasEntry(1, 1),
+				hasEntry(2, 2)
+		));
+
+		// Standard deserialization with string key
+
+		Type typeOfMapString = TypeToken.getParameterized(Map.class, String.class, Integer.class).getType();
+		Map<String, Integer> stringMap = jsonObjectMapper.fromJson(json, typeOfMapString);
+		assertNotNull(stringMap);
+		assertTrue(stringMap.size() == 2);
+		assertThat(stringMap, allOf(
+				hasEntry("1", 1),
+				hasEntry("2", 2)
+		));
+
+		// Complex deserialization again
+		map = jsonObjectMapper.fromJson(complexJson, complexType);
+
+		assertNotNull(map);
+		assertEquals(map.size(), 2);
+		assertThat(map, allOf(
+				hasEntry(TF_HELLO, TF_WORLD),
+				hasEntry(TF_WORLD, TF_HELLO)
+		));
 	}
 
 }
