@@ -198,6 +198,37 @@ public class GsonJacksonObjectMapperTest {
 	}
 
 	@Test
+	public void testSimpleIntegerMap() throws Exception {
+		Map<Integer, Integer> object = mapOf(1, 1, 1, 2);
+		Type typeOfMap = TypeToken.getParameterized(Map.class, Integer.class, Integer.class).getType();
+
+		// Serialization with Jackson
+		String jacksonString = jacksonObjectMapper.toJson(object);
+
+		// Deserialization with Gson
+		Map<Integer, Integer> gsonObject = gsonObjectMapper.fromJson(jacksonString, typeOfMap);
+		assertNotNull(gsonObject);
+		assertTrue(gsonObject.size() == 2);
+		assertThat(gsonObject, allOf(
+				hasEntry(1, 1),
+				hasEntry(2, 2)
+		));
+
+		// Serialization with Gson
+		String gsonString = gsonObjectMapper.toJson(object);
+
+		// Deserialization with Jackson
+		Map<Integer, Integer> jacksonObject = jacksonObjectMapper.fromJson(gsonString, typeOfMap);
+		assertNotNull(jacksonObject);
+		assertTrue(jacksonObject.size() == 2);
+		assertThat(jacksonObject, allOf(
+				hasEntry(1, 1),
+				hasEntry(1, 2)
+		));
+
+	}
+
+	@Test
 	public void testSimpleMultipleMap() throws Exception {
 		Map<String, Map<String, Boolean>> object = mapOf(
 				"k1",

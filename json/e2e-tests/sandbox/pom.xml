@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<artifactId>sq-serialization-json-e2e-tests</artifactId>
+		<groupId>com.swissquote.foundation.serialization</groupId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>sq-serialization-json-e2e-tests-sandbox</artifactId>
+	<name>sq-serialization-json-e2e-tests-tests-sandbox</name>
+
+	<properties>
+		<sq.artifact.type>internal</sq.artifact.type>
+
+		<thirdparty-sandboxes.version>1.1.39</thirdparty-sandboxes.version>
+		<sandbox3.version>1.4.11</sandbox3.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.swissquote.foundation.serialization</groupId>
+			<artifactId>sq-serialization-json-e2e-tests-soa-soa-sandbox</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.swissquote.foundation</groupId>
+			<artifactId>sq-rabbitmq-sandbox</artifactId>
+			<version>${thirdparty-sandboxes.version}</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>com.swissquote</groupId>
+				<artifactId>sq-modular-sandbox-maven-plugin</artifactId>
+				<version>${sandbox3.version}</version>
+			</plugin>
+		</plugins>
+	</build>
+</project>
