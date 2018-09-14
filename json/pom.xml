@@ -17,6 +17,7 @@
         <module>spring-amqp-support</module>
         <module>spring-integration-support</module>
 		<module>tests</module>
+		<module>e2e-tests</module>
 	</modules>
 
 	<properties>

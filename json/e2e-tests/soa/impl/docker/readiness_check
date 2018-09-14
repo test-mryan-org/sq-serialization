@@ -1,0 +1,2 @@
+#!/bin/bash
+curl --verbose --fail http://localhost:80/sq-serialization-json-e2e-tests-soa-soa/health/ping?type=READINESS

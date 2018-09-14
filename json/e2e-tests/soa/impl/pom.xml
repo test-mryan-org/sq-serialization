@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+		<parent>
+		<groupId>com.swissquote.foundation.serialization</groupId>
+		<artifactId>sq-serialization-json-e2e-tests-soa</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>sq-serialization-json-e2e-tests-soa-soa</artifactId>
+	<packaging>war</packaging>
+
+	<properties>
+		<sq.artifact.type>soa</sq.artifact.type>
+		<sq.implemented.apis>com.swissquote.foundation.serialization:sq-serialization-json-e2e-tests-soa-api-v1</sq.implemented.apis>
+		<apt-maven-plugin.version>1.1.3</apt-maven-plugin.version>
+	</properties>
+
+	<dependencies>
+
+		<!-- the API implemented by the service -->
+		<dependency>
+			<groupId>com.swissquote.foundation.serialization</groupId>
+			<artifactId>sq-serialization-json-e2e-tests-soa-api-v1</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<!-- Logging -->
+		<dependency>
+			<groupId>com.swissquote.foundation.apps</groupId>
+			<artifactId>sq-logging-platform-webapp-log4j</artifactId>
+			<version>${sq-platform.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+
+		<!-- Configuration -->
+		<dependency>
+			<groupId>com.swissquote.foundation</groupId>
+			<artifactId>sq-it-config-spring</artifactId>
+			<version>${sq-it-config.version}</version>
+		</dependency>
+
+		<!-- Spring -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+		</dependency>
+
+		<!-- SOA platform -->
+		<dependency>
+			<groupId>com.swissquote.foundation.soa</groupId>
+			<artifactId>sq-soa-service-all</artifactId>
+			<version>${sq-soa-platform.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>sq-soa-gson-jaxrs-json-provider</artifactId>
+					<groupId>com.swissquote.foundation.soa</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.swissquote.foundation.serialization</groupId>
+			<artifactId>sq-serialization-json-jaxrs-support</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.swissquote.foundation.serialization</groupId>
+			<artifactId>sq-serialization-json-gson</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<!-- monitoring -->
+		<dependency>
+			<groupId>com.swissquote.foundation.monitoring</groupId>
+			<artifactId>sq-dropwizard-metrics-jdbc</artifactId>
+			<version>${sq-dropwizard-metrics.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.swissquote.foundation.monitoring</groupId>
+			<artifactId>sq-dropwizard-metrics-jersey</artifactId>
+			<version>${sq-dropwizard-metrics.version}</version>
+		</dependency>
+	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-core</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-beans</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-web</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-aop</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-expression</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-core</artifactId>
+				<version>${hibernate.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<plugins>
+
+			<!-- api validation -->
+			<plugin>
+				<groupId>com.swissquote.foundation.soa</groupId>
+				<artifactId>sq-soa-support-api-validation-plugin</artifactId>
+				<version>${sq-soa-platform.version}</version>
+				<configuration>
+					<packages>
+						com.swissquote.foundation.serialization.rest.v1.resources
+					</packages>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>compile</phase>
+						<goals>
+							<goal>validate</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- test environment configuration -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<!-- without this configuration, the WebApplicationInitializers
+					are not detected in the classpath when running surefire tests -->
+					<useManifestOnlyJar>false</useManifestOnlyJar>
+
+					<systemPropertyVariables>
+						<!-- to log in the console during integration tests -->
+						<log4j.configurationFile>classpath:log4j2-console.xml</log4j.configurationFile>
+					</systemPropertyVariables>
+				</configuration>
+			</plugin>
+
+			<!-- deployment -->
+			<plugin>
+				<!-- deploy to preprod command -->
+				<!-- mvn clean install xldeploy:deploy -Ddeployit.environmentId=Environments/pre/Pre -->
+				<groupId>com.xebialabs.xldeploy</groupId>
+				<artifactId>xldeploy-maven-plugin</artifactId>
+				<configuration>
+					<applicationName>sq-serialization-json-e2e-tests-soa-soa</applicationName>
+					<deployables>
+						<sq.WAR name="${project.artifactId}" artifactId="${project.artifactId}" groupId="${project.groupId}">
+							<tags>
+								<value>${project.artifactId}</value>
+							</tags>
+						</sq.WAR>
+					</deployables>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>com.spotify</groupId>
+				<artifactId>dockerfile-maven-plugin</artifactId>
+				<configuration>
+					<buildArgs>
+						<WEBAPP_DIR>${project.build.finalName}</WEBAPP_DIR>
+					</buildArgs>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<configuration>
+					<!-- Don't checkstyle any generated sources (eg QueryDsl) -->
+					<sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+
+
+		</plugins>
+	</build>
+</project>

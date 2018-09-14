@@ -1,0 +1,39 @@
+{
+  "rabbit_version": "3.5.7",
+  "users": [
+    {
+      "name": "guest",
+      "password": "guest",
+      "tags": "administrator"
+    },
+    {
+      "name": "example",
+      "password": "example",
+      "tags": ""
+    }
+  ],
+  "vhosts": [
+    {
+      "name": "foundation"
+    }
+  ],
+  "permissions": [
+    { "user": "guest", "vhost": "foundation", "configure": ".*", "write": ".*", "read": ".*"},
+    { "user": "example", "vhost": "foundation", "configure": "", "write": "global.tx", "read": "complex.q,collection.q,map.q,common.q"}
+  ],
+  "exchanges": [
+    { "name": "global.tx", "vhost": "foundation", "type": "topic", "durable": true, "auto_delete": false, "arguments": {}}
+  ],
+  "queues": [
+    { "name": "complex.q", "vhost": "foundation", "durable": true, "auto_delete": false, "arguments": {"x-message-ttl": 3600000}},
+    { "name": "collection.q", "vhost": "foundation", "durable": true, "auto_delete": false, "arguments": {"x-message-ttl": 3600000}},
+    { "name": "map.q", "vhost": "foundation", "durable": true, "auto_delete": false, "arguments": {"x-message-ttl": 3600000}},
+    { "name": "common.q", "vhost": "foundation", "durable": true, "auto_delete": false, "arguments": {"x-message-ttl": 3600000}}
+  ],
+  "bindings": [
+    { "source": "global.tx", "vhost": "foundation", "destination": "complex.q", "destination_type": "queue", "routing_key": "complex.#", "arguments": {}},
+    { "source": "global.tx", "vhost": "foundation", "destination": "collection.q", "destination_type": "queue", "routing_key": "collection.#", "arguments": {}},
+    { "source": "global.tx", "vhost": "foundation", "destination": "map.q", "destination_type": "queue", "routing_key": "map.#", "arguments": {}},
+    { "source": "global.tx", "vhost": "foundation", "destination": "common.q", "destination_type": "queue", "routing_key": "common.#", "arguments": {}}
+  ]
+}
