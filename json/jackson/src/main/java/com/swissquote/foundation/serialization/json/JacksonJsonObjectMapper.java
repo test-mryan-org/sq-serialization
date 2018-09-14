@@ -63,6 +63,7 @@ public class JacksonJsonObjectMapper implements JsonObjectMapper<JsonNode, JsonP
 				// new need to explicitly register the module
 				// https://github.com/FasterXML/jackson-modules-java8/blob/jackson-modules-java8-2.9.6/README.md#registering-modules
 				.registerModule(new JavaTimeModule())
+				// Force the manual registration to enable the ComplexMapKeySerialization feature
 				.registerModule(new SQModule().enableComplexMapKeySerialization());
 
 		return objectMapper;

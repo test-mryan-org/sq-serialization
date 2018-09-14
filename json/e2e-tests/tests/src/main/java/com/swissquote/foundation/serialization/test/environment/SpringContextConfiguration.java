@@ -1,4 +1,4 @@
-package com.swissquote.treasury.itests.environment;
+package com.swissquote.foundation.serialization.test.environment;
 
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
@@ -11,7 +11,15 @@ import org.springframework.context.annotation.Configuration;
 import com.rabbitmq.client.ConnectionFactory;
 
 /**
- * the context to provide connection to oracle and instantiate db steps.
+ * TODO @Thomas Deffayet
+ * Do not use this mechanism with the Listener, rather complete the
+ * - spring-integration-amqp.xml
+ * - spring-rabbit.xml
+ * in order to simulate a real use of what we want to test.
+ *
+ *
+ *     /!\  THE COMPILATION FAILS ON PURPOSE SO YOU READ THIS ABOVE !! ;-)
+ *
  */
 @Configuration
 public class SpringContextConfiguration {
@@ -42,7 +50,7 @@ public class SpringContextConfiguration {
 	public SimpleMessageListenerContainer rmqListenerContainer(CachingConnectionFactory cachingConnectionFactory) {
 		SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
 		container.setConnectionFactory(cachingConnectionFactory);
-		container.setQueueNames("transaction.notifications.sqty-transaction-notification-server.q");
+		container.setQueueNames("complex.q");
 		container.setAutoStartup(true);
 		container.setMessageListener(TestRuntime.INSTANCE.getTestRuntime().getTestEnvironment().getNotificationAmqpListener());
 		return container;

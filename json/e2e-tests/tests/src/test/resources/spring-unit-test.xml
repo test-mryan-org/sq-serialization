@@ -1,8 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	   xmlns:int="http://www.springframework.org/schema/integration"
+	   xsi:schemaLocation="
+	   	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	   	http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
+		">
 
-	<bean class="com.swissquote.treasury.itests.environment.SpringContextConfiguration"/>
+	<bean class="com.swissquote.foundation.serialization.test.environment.SpringContextConfiguration"/>
+
+	<!-- TODO Thomas This is just an example of channels to bind in TestEnvironment -->
+	<int:channel id="internal-outbound-channel"/>
+	<int:channel id="internal-inbound-channel"/>
+
+	<!-- Import spring-rabbit components to send and read message (without spring integration) -->
+	<import resource="spring-rabbit.xml"/>
+	<!-- Import spring-integration components to send and read message (with spring integration) -->
+	<import resource="spring-integration-amqp.xml"/>
 
 </beans>

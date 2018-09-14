@@ -1,4 +1,4 @@
-package com.swissquote.treasury.fx.compensate;
+package com.swissquote.foundation.serialization.test;
 
 import static com.jayway.awaitility.Awaitility.waitAtMost;
 
@@ -13,8 +13,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.jayway.awaitility.Duration;
 import com.swissquote.foundation.serialization.api.v1.resources.ExampleResource;
-import com.swissquote.treasury.itests.environment.E2ERule;
-import com.swissquote.treasury.itests.environment.TransactionNotificationAmqpListener;
+import com.swissquote.foundation.serialization.test.environment.E2ERule;
+import com.swissquote.foundation.serialization.test.environment.TransactionNotificationAmqpListener;
 
 import lombok.extern.slf4j.Slf4j;
 

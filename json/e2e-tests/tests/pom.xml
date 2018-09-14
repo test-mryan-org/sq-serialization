@@ -37,9 +37,19 @@
 		</dependency>
 		<dependency>
 			<groupId>com.swissquote.foundation.serialization</groupId>
-			<artifactId>sq-serialization-json-gson</artifactId>
+			<artifactId>sq-serialization-json-spring-amqp-support</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.swissquote.foundation.serialization</groupId>
+			<artifactId>sq-serialization-json-spring-integration-support</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!--<dependency>-->
+			<!--<groupId>com.swissquote.foundation.serialization</groupId>-->
+			<!--<artifactId>sq-serialization-json-gson</artifactId>-->
+			<!--<version>${project.version}</version>-->
+		<!--</dependency>-->
 		<!-- tests -->
 		<dependency>
 			<groupId>junit</groupId>
@@ -114,7 +124,7 @@
 					<properties>
 						<property>
 							<name>listener</name>
-							<value>com.swissquote.treasury.itests.environment.EndToEndTestLifecycle</value>
+							<value>com.swissquote.foundation.serialization.test.environment.EndToEndTestLifecycle</value>
 						</property>
 					</properties>
 				</configuration>

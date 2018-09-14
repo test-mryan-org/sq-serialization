@@ -31,8 +31,12 @@ public class JsonObjectMapperProvider implements MessageBodyReader<Object>, Mess
 	private final JsonObjectMapper<?, ?> objectMapper;
 
 	public JsonObjectMapperProvider() {
-		this.objectMapper = JsonSerialization.getSerializationProvider().getJsonObjectMapper();
+		this(JsonSerialization.getSerializationProvider().getJsonObjectMapper());
 	}
+	public JsonObjectMapperProvider(JsonObjectMapper<?, ?> objectMapper) {
+		this.objectMapper = objectMapper;
+	}
+
 
 	public static final Charset getCharset(final MediaType m) {
 		String name = m == null ? null : m.getParameters().get(MediaType.CHARSET_PARAMETER);

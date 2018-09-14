@@ -1,4 +1,4 @@
-package com.swissquote.treasury.itests.environment;
+package com.swissquote.foundation.serialization.test.environment;
 
 import lombok.Getter;
 

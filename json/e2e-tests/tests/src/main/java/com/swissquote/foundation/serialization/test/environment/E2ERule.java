@@ -1,4 +1,4 @@
-package com.swissquote.treasury.itests.environment;
+package com.swissquote.foundation.serialization.test.environment;
 
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;

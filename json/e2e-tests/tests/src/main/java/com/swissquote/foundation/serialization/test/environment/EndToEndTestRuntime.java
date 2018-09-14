@@ -1,4 +1,4 @@
-package com.swissquote.treasury.itests.environment;
+package com.swissquote.foundation.serialization.test.environment;
 
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -24,6 +24,9 @@ import com.github.swissquote.carnotzet.core.runtime.log.LogEvents;
 import com.github.swissquote.carnotzet.core.runtime.log.StdOutLogPrinter;
 import com.github.swissquote.carnotzet.runtime.docker.compose.DockerComposeRuntime;
 import com.swissquote.foundation.sandbox.core.SwissquoteCarnotzetConfig;
+import com.swissquote.foundation.serialization.json.JsonSerialization;
+import com.swissquote.foundation.serialization.json.spi.JacksonJsonSerializationProvider;
+import com.swissquote.foundation.serialization.json.support.jaxrs.JsonObjectMapperProvider;
 import com.swissquote.foundation.soa.client.SqSoaWebTargetFactory;
 import com.swissquote.foundation.soa.client.WebProxyBuilder;
 import com.swissquote.foundation.soa.client.config.ServiceConfig;
@@ -56,13 +59,6 @@ public class EndToEndTestRuntime {
 		runtime.registerLogListener(new StdOutLogPrinter(sandbox, 0, true));
 	}
 
-	TestEnvironment getTestEnvironment() {
-		if (testEnvironment == null) {
-			testEnvironment = new TestEnvironment(this);
-		}
-		return testEnvironment;
-	}
-
 	private static ClientConfig buildClientConfig() {
 		return new ClientConfig()
 				// register FULL logger for debugging. Set Level.INFO to turn it on.
@@ -70,9 +66,21 @@ public class EndToEndTestRuntime {
 				//				.property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL, Level.WARNING.getName())
 				// register SIMPLE logger for normal usage (logs only outgoing requests lines, no headers, no responses)
 				.register(SimpleClientLoggingFilter.class)
+				// Configure ObjectMapper for Jackson
+				.register(new JsonObjectMapperProvider(JsonSerialization
+						.getSerializationProvider(JacksonJsonSerializationProvider.class.getName())
+						.getJsonObjectMapper()))
+
 				// We disable most of the SQ-SOA specific stuff (IT-Config, Hystrix, Failover, etc...)
 				// we don't need it in the testing environment, and Hystrix is a PITA to get to run correctly
 				.connectorProvider(new JettyConnectorProvider());
+	}
+
+	TestEnvironment getTestEnvironment() {
+		if (testEnvironment == null) {
+			testEnvironment = new TestEnvironment(this);
+		}
+		return testEnvironment;
 	}
 
 	private ServiceConfig buildServiceConfig(String artifactId, String serviceName, String username, String password) {
