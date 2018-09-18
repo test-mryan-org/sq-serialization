@@ -13,17 +13,6 @@
 		<sq.artifact.type>library</sq.artifact.type>
 	</properties>
 
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-core</artifactId>
-				<!-- because spring integration is not 4.3.19 yet -->
-				<version>4.3.18.RELEASE</version>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
-
 	<dependencies>
 		<dependency>
 			<groupId>com.swissquote.foundation.serialization</groupId>

@@ -12,6 +12,14 @@
 
 	<properties>
 		<sq.artifact.type>library</sq.artifact.type>
+
+		<sq-modular-sandbox.version>1.4.19</sq-modular-sandbox.version>
+		<thirdparty-sandboxes.version>1.1.41</thirdparty-sandboxes.version>
+
+		<sq-platform.version>3.4.6</sq-platform.version>
+		<sq-it-config.version>3.5.1</sq-it-config.version>
+		<sq-dropwizard-metrics.version>2.0.3</sq-dropwizard-metrics.version>
+		<sq-soa-platform.version>2.1.18</sq-soa-platform.version>
 	</properties>
 
 	<modules>

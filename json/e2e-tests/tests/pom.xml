@@ -12,27 +12,97 @@
 
 	<properties>
 		<sq.artifact.type>internal</sq.artifact.type>
-		<sq-modular-sandbox.version>1.4.11</sq-modular-sandbox.version>
-		<sq-logging.version>4.0.10</sq-logging.version>
-		<spring-integration.version>4.3.15.RELEASE</spring-integration.version>
-		<spring.version>4.3.15.RELEASE</spring.version>
-		<spring-rabbit.version>1.7.8.RELEASE</spring-rabbit.version>
+
+		<sq-logging.version>4.1.0</sq-logging.version>
+		<awaitility.version>1.7.0</awaitility.version>
+		<sqty-fwk.version>1.9.1</sqty-fwk.version>
 	</properties>
 
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-aop</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-beans</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-core</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>jul-to-slf4j</artifactId>
+				<version>${slf4j.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.glassfish.jersey.core</groupId>
+				<artifactId>jersey-client</artifactId>
+				<version>${jersey.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.glassfish.jersey.core</groupId>
+				<artifactId>jersey-common</artifactId>
+				<version>${jersey.version}</version>
+			</dependency>
+
+			<!-- amqp -->
+			<dependency>
+				<groupId>org.springframework.amqp</groupId>
+				<artifactId>spring-rabbit</artifactId>
+				<version>${spring-amqp.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.amqp</groupId>
+				<artifactId>spring-amqp</artifactId>
+				<version>${spring-amqp.version}</version>
+			</dependency>
+
+			<!-- jackson -->
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-core</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-annotations</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.datatype</groupId>
+				<artifactId>jackson-datatype-jsr310</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
 	<dependencies>
-		<dependency>
-			<groupId>org.springframework.amqp</groupId>
-			<artifactId>spring-rabbit</artifactId>
-			<version>${spring-rabbit.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.integration</groupId>
-			<artifactId>spring-integration-amqp</artifactId>
-			<version>${spring-integration.version}</version>
-		</dependency>
+		<!-- sq-serialization -->
+		<!--<dependency>-->
+			<!--<groupId>com.swissquote.foundation.serialization</groupId>-->
+			<!--<artifactId>sq-serialization-json-gson</artifactId>-->
+			<!--<version>${project.version}</version>-->
+		<!--</dependency>-->
 		<dependency>
 			<groupId>com.swissquote.foundation.serialization</groupId>
 			<artifactId>sq-serialization-json-jackson</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.swissquote.foundation.serialization</groupId>
+			<artifactId>sq-serialization-json-jaxrs-support</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -45,25 +115,13 @@
 			<artifactId>sq-serialization-json-spring-integration-support</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<!--<dependency>-->
-			<!--<groupId>com.swissquote.foundation.serialization</groupId>-->
-			<!--<artifactId>sq-serialization-json-gson</artifactId>-->
-			<!--<version>${project.version}</version>-->
-		<!--</dependency>-->
-		<!-- tests -->
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.12</version>
-			<scope>compile</scope>
+			<groupId>com.swissquote.foundation.serialization</groupId>
+			<artifactId>sq-serialization-json-e2e-tests-soa-api-v1</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 
-		<dependency>
-			<groupId>com.swissquote.foundation</groupId>
-			<artifactId>sq-modular-sandbox-junit4</artifactId>
-			<version>${sq-modular-sandbox.version}</version>
-		</dependency>
-
+		<!-- miscellaneous -->
 		<dependency>
 			<groupId>com.swissquote.foundation.apps</groupId>
 			<artifactId>sq-logging-platform-log4j</artifactId>
@@ -72,17 +130,41 @@
 		<dependency>
 			<groupId>com.jayway.awaitility</groupId>
 			<artifactId>awaitility</artifactId>
-			<version>1.7.0</version>
+			<version>${awaitility.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>jul-to-slf4j</artifactId>
-			<version>${slf4j.version}</version>
+			<groupId>com.swissquote.foundation.soa</groupId>
+			<artifactId>sq-soa-client-all</artifactId>
+			<version>${sq-soa-platform.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.swissquote.foundation.soa</groupId>
+					<artifactId>sq-soa-gson-jaxrs-json-provider</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.integration</groupId>
+			<artifactId>spring-integration-amqp</artifactId>
+			<version>${spring-integration.version}</version>
+		</dependency>
+
+		<!-- tests -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.swissquote.foundation</groupId>
+			<artifactId>sq-modular-sandbox-junit4</artifactId>
+			<version>${sq-modular-sandbox.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.swissquote.treasury.fwk</groupId>
 			<artifactId>sqty-fwk-tests-matchers</artifactId>
-			<version>1.9.1</version>
+			<version>${sqty-fwk.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -90,29 +172,6 @@
 			<version>${spring.version}</version>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>com.swissquote.foundation.serialization</groupId>
-			<artifactId>sq-serialization-json-e2e-tests-soa-api-v1</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.swissquote.foundation.soa</groupId>
-			<artifactId>sq-soa-client-all</artifactId>
-			<version>2.1.18</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>sq-soa-gson-jaxrs-json-provider</artifactId>
-					<groupId>com.swissquote.foundation.soa</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>com.swissquote.foundation.serialization</groupId>
-			<artifactId>sq-serialization-json-jaxrs-support</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
 	</dependencies>
 
 	<build>
