@@ -1,5 +1,7 @@
 package com.swissquote.foundation.serialization.api.v1.resources;
 
+import java.util.Map;
+
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -31,5 +33,29 @@ public interface ExampleResource {
 	@RolesAllowed(ROLE)
 	@Produces(MediaType.APPLICATION_JSON)
 	ComplexData getComplexData();
+
+	@GET
+	@Path("map-complex-value-value")
+	@RolesAllowed(ROLE)
+	@Produces(MediaType.APPLICATION_JSON)
+	Map<String, ComplexValue> getMapComplexValueAsValue();
+
+	@GET
+	@Path("map-complex-value-key")
+	@RolesAllowed(ROLE)
+	@Produces(MediaType.APPLICATION_JSON)
+	Map<ComplexValue, String> getMapComplexValueAsKey();
+
+	@GET
+	@Path("map-complex-data-value")
+	@RolesAllowed(ROLE)
+	@Produces(MediaType.APPLICATION_JSON)
+	Map<String, ComplexData> getMapComplexDataAsValue();
+
+	@GET
+	@Path("map-complex-data-key")
+	@RolesAllowed(ROLE)
+	@Produces(MediaType.APPLICATION_JSON)
+	Map<ComplexData, String> getMapComplexDataAsKey();
 
 }
