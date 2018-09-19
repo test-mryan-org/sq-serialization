@@ -63,8 +63,8 @@
 			<version>${sq-soa-platform.version}</version>
 			<exclusions>
 				<exclusion>
-					<artifactId>sq-soa-gson-jaxrs-json-provider</artifactId>
 					<groupId>com.swissquote.foundation.soa</groupId>
+					<artifactId>sq-soa-gson-jaxrs-json-provider</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>

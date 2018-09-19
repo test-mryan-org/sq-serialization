@@ -24,8 +24,10 @@ import com.github.swissquote.carnotzet.core.runtime.log.LogEvents;
 import com.github.swissquote.carnotzet.core.runtime.log.StdOutLogPrinter;
 import com.github.swissquote.carnotzet.runtime.docker.compose.DockerComposeRuntime;
 import com.swissquote.foundation.sandbox.core.SwissquoteCarnotzetConfig;
-import com.swissquote.foundation.serialization.json.JsonSerialization;
-import com.swissquote.foundation.serialization.json.spi.JacksonJsonSerializationProvider;
+import com.swissquote.foundation.serialization.api.v1.entities.ComplexValue;
+import com.swissquote.foundation.serialization.api.v1.entities.ComplexValueMixin;
+import com.swissquote.foundation.serialization.json.JacksonJsonObjectMapper;
+import com.swissquote.foundation.serialization.json.JsonObjectMapper;
 import com.swissquote.foundation.serialization.json.support.jaxrs.JsonObjectMapperProvider;
 import com.swissquote.foundation.soa.client.SqSoaWebTargetFactory;
 import com.swissquote.foundation.soa.client.WebProxyBuilder;
@@ -67,13 +69,20 @@ public class EndToEndTestRuntime {
 				// register SIMPLE logger for normal usage (logs only outgoing requests lines, no headers, no responses)
 				.register(SimpleClientLoggingFilter.class)
 				// Configure ObjectMapper for Jackson
-				.register(new JsonObjectMapperProvider(JsonSerialization
-						.getSerializationProvider(JacksonJsonSerializationProvider.class.getName())
-						.getJsonObjectMapper()))
+				.register(new JsonObjectMapperProvider(buildJacksonJsonObjectMapper()))
+				// cannot use it because need for mixin
+				// JsonSerialization.getSerializationProvider(JacksonJsonSerializationProvider.class.getName())
+				// 		.getJsonObjectMapper()))
 
 				// We disable most of the SQ-SOA specific stuff (IT-Config, Hystrix, Failover, etc...)
 				// we don't need it in the testing environment, and Hystrix is a PITA to get to run correctly
 				.connectorProvider(new JettyConnectorProvider());
+	}
+
+	private static JsonObjectMapper buildJacksonJsonObjectMapper() {
+		JacksonJsonObjectMapper jacksonJsonObjectMapper = new JacksonJsonObjectMapper();
+		jacksonJsonObjectMapper.getObjectMapper().addMixIn(ComplexValue.class, ComplexValueMixin.class);
+		return jacksonJsonObjectMapper;
 	}
 
 	TestEnvironment getTestEnvironment() {
