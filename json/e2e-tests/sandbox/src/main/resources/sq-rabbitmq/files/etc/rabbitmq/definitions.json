@@ -1,21 +1,11 @@
 {
   "rabbit_version": "3.5.7",
   "users": [
-    {
-      "name": "guest",
-      "password": "guest",
-      "tags": "administrator"
-    },
-    {
-      "name": "example",
-      "password": "example",
-      "tags": ""
-    }
+    { "name": "guest", "password": "guest", "tags": "administrator"},
+    { "name": "example", "password": "example", "tags": ""}
   ],
   "vhosts": [
-    {
-      "name": "foundation"
-    }
+    { "name": "foundation"}
   ],
   "permissions": [
     { "user": "guest", "vhost": "foundation", "configure": ".*", "write": ".*", "read": ".*"},

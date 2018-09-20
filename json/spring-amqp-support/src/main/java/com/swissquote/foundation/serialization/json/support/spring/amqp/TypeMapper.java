@@ -17,9 +17,10 @@ import lombok.Setter;
 
 public class TypeMapper implements ClassMapper, BeanClassLoaderAware {
 
-	private static final String CLASS_ID_FIELD_NAME = "json__TypeId__";
-	private static final String CONTENT_CLASS_ID_FIELD_NAME = "json__ContentTypeId__";
-	private static final String KEY_CLASS_ID_FIELD_NAME = "json__KeyTypeId__";
+	static final String CONTENT_TYPE_NAME = "contentType";
+	private static final String CLASS_ID_FIELD_NAME = "__TypeId__";
+	private static final String CONTENT_CLASS_ID_FIELD_NAME = "__ContentTypeId__";
+	private static final String KEY_CLASS_ID_FIELD_NAME = "__KeyTypeId__";
 
 	@Setter
 	private JsonObjectMapper jsonObjectMapper;

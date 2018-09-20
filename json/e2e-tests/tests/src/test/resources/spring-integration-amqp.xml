@@ -1,37 +1,134 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:int="http://www.springframework.org/schema/integration"
 	   xmlns:int-amqp="http://www.springframework.org/schema/integration/amqp"
-	   xmlns:p="http://www.springframework.org/schema/p"
-	   xmlns:rabbit="http://www.springframework.org/schema/rabbit"
 	   xsi:schemaLocation="
 			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-			http://www.springframework.org/schema/rabbit http://www.springframework.org/schema/rabbit/spring-rabbit.xsd
+			http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
 			http://www.springframework.org/schema/integration/amqp http://www.springframework.org/schema/integration/amqp/spring-integration-amqp.xsd
 		">
 
-	<!-- rabbitmq configuration -->
-	<!--<bean id="clientConnectionFactory" class="org.springframework.amqp.rabbit.connection.RabbitConnectionFactoryBean"-->
-		  <!--p:useSSL="false"-->
-		  <!--p:skipServerCertificateValidation="true"/>-->
+	<import resource="classpath:/rmq-config.xml"/>
 
-	<!--<rabbit:connection-factory id="connectionFactory" connection-factory="clientConnectionFactory"-->
-							   <!--addresses="sq-rabbitmq.docker"-->
-							   <!--username="example"-->
-							   <!--password="example"-->
-							   <!--virtual-host="foundation"/>-->
+	<int:publish-subscribe-channel id="internal-outbound-channel"/>
+	<int:channel id="internal-inbound-channel"/>
+	<int:publish-subscribe-channel id="internal-outbound-channel-complexData"/>
+	<int:publish-subscribe-channel id="internal-outbound-channel-map"/>
+	<int:publish-subscribe-channel id="internal-outbound-channel-collection"/>
 
-	<!--<rabbit:template id="rabbitTemplate" connection-factory="connectionFactory"/>-->
+	<int:payload-type-router input-channel="internal-outbound-channel">
+		<int:mapping type="com.swissquote.foundation.serialization.api.v1.entities.ComplexData"
+					 channel="internal-outbound-channel-complexData"/>
+		<int:mapping type="java.util.Map"
+					 channel="internal-outbound-channel-map"/>
+		<int:mapping type="java.util.Collection"
+					 channel="internal-outbound-channel-collection"/>
+	</int:payload-type-router>
 
-	<!--<bean id="amqpMessageConverter" class="com.swissquote.foundation.serialization.json.support.spring.amqp.SQJsonMessageConverter"/>-->
+	<bean id="serviceActivator" class="com.swissquote.foundation.serialization.test.spring.RMQServiceActivator"/>
 
-	<!--&lt;!&ndash; inbound &ndash;&gt;-->
-	<!--<int-amqp:inbound-channel-adapter-->
-			<!--channel="internal-inbound-channel"-->
-			<!--queue-names="..."-->
-			<!--connection-factory="connectionFactory"-->
-			<!--concurrent-consumers="1"-->
-			<!--acknowledge-mode="AUTO"-->
-			<!--message-converter="amqpMessageConverter"/>-->
+	<!-- **************************** -->
+	<!-- test with object transformer -->
+	<bean id="objectMapper"
+		  class="com.swissquote.foundation.serialization.json.support.spring.integration.SQJsonObjectMapper"/>
+
+	<!-- outbound -->
+	<int:chain input-channel="internal-outbound-channel-complexData">
+		<int:object-to-json-transformer object-mapper="objectMapper"/>
+		<int-amqp:outbound-channel-adapter
+				amqp-template="rabbitTemplateTransformer"
+				exchange-name="global.tx"
+				routing-key="complex.data"
+		/>
+	</int:chain>
+	<int:chain input-channel="internal-outbound-channel-map">
+		<int:object-to-json-transformer object-mapper="objectMapper"/>
+		<int-amqp:outbound-channel-adapter
+				amqp-template="rabbitTemplateTransformer"
+				exchange-name="global.tx"
+				routing-key="map.complexKey"
+		/>
+	</int:chain>
+	<int:chain input-channel="internal-outbound-channel-collection">
+		<int:object-to-json-transformer object-mapper="objectMapper"/>
+		<int-amqp:outbound-channel-adapter
+				amqp-template="rabbitTemplateTransformer"
+				exchange-name="global.tx"
+				routing-key="collection.complexObject"
+		/>
+	</int:chain>
+
+	<!-- inbound -->
+	<int-amqp:inbound-channel-adapter
+			channel="internal-inbound-channel-complexData"
+			queue-names="complex.q"
+			connection-factory="connectionFactory"
+			concurrent-consumers="1"
+			acknowledge-mode="AUTO"
+	/>
+	<int:chain input-channel="internal-inbound-channel-complexData">
+		<int:json-to-object-transformer object-mapper="objectMapper"/>
+		<int:service-activator ref="serviceActivator" method="handleTransformer"/>
+	</int:chain>
+	<int-amqp:inbound-channel-adapter
+			channel="internal-inbound-channel-map"
+			queue-names="map.q"
+			connection-factory="connectionFactory"
+			concurrent-consumers="1"
+			acknowledge-mode="AUTO"
+	/>
+	<int:chain input-channel="internal-inbound-channel-map">
+		<int:json-to-object-transformer object-mapper="objectMapper"/>
+		<int:service-activator ref="serviceActivator" method="handleTransformer"/>
+	</int:chain>
+	<int-amqp:inbound-channel-adapter
+			channel="internal-inbound-channel-collection"
+			queue-names="collection.q"
+			connection-factory="connectionFactory"
+			concurrent-consumers="1"
+			acknowledge-mode="AUTO"
+	/>
+	<int:chain input-channel="internal-inbound-channel-collection">
+		<int:json-to-object-transformer object-mapper="objectMapper"/>
+		<int:service-activator ref="serviceActivator" method="handleTransformer"/>
+	</int:chain>
+	<!-- end test -->
+	<!-- ******** -->
+
+	<!-- **************************** -->
+	<!-- test with message converter -->
+	<!-- outbound -->
+	<int-amqp:outbound-channel-adapter
+			channel="internal-outbound-channel-complexData"
+			amqp-template="rabbitTemplateConverter"
+			exchange-name="global.tx"
+			routing-key="common.complex"
+	/>
+	<int-amqp:outbound-channel-adapter
+			channel="internal-outbound-channel-map"
+			amqp-template="rabbitTemplateConverter"
+			exchange-name="global.tx"
+			routing-key="common.map"
+	/>
+	<int-amqp:outbound-channel-adapter
+			channel="internal-outbound-channel-collection"
+			amqp-template="rabbitTemplateConverter"
+			exchange-name="global.tx"
+			routing-key="common.collection"
+	/>
+
+	<!-- inbound -->
+	<int-amqp:inbound-channel-adapter
+			channel="internal-inbound-channel"
+			queue-names="common.q"
+			connection-factory="connectionFactory"
+			concurrent-consumers="1"
+			acknowledge-mode="AUTO"
+			message-converter="messageConverter"
+	/>
+	<int:service-activator input-channel="internal-inbound-channel" ref="serviceActivator" method="handleTransformer"/>
+	<!-- end test -->
+	<!-- ******** -->
 
 </beans>

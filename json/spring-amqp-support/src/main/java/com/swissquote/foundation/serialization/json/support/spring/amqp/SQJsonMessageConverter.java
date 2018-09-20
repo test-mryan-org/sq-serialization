@@ -67,6 +67,8 @@ public class SQJsonMessageConverter<N, P> extends AbstractJsonMessageConverter {
 		messageProperties.setContentType(MessageProperties.CONTENT_TYPE_JSON);
 		messageProperties.setContentEncoding(getDefaultCharset());
 		messageProperties.setContentLength(bytes.length);
+		// add contentType in header to be compliant with spring transformer
+		messageProperties.getHeaders().put(TypeMapper.CONTENT_TYPE_NAME, MessageProperties.CONTENT_TYPE_JSON);
 
 		if (getClassMapper() == null) {
 			typeMapper.fromType(objectToConvert, messageProperties);

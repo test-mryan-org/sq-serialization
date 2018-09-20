@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+	   xsi:schemaLocation="
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+			http://www.springframework.org/schema/rabbit http://www.springframework.org/schema/rabbit/spring-rabbit.xsd
+		">
+
+	<!-- rabbitmq configuration -->
+	<bean id="clientConnectionFactory" class="org.springframework.amqp.rabbit.connection.RabbitConnectionFactoryBean">
+		<property name="useSSL" value="true"/>
+		<property name="skipServerCertificateValidation" value="true"/>
+	</bean>
+
+	<rabbit:connection-factory id="connectionFactory"
+							   addresses="sq-rabbitmq.docker:5671"
+							   username="guest"
+							   password="guest"
+							   virtual-host="foundation"
+							   connection-factory="clientConnectionFactory"
+	/>
+	<rabbit:template id="rabbitTemplateTransformer" connection-factory="connectionFactory"/>
+
+	<bean id="messageConverter" class="com.swissquote.foundation.serialization.json.support.spring.amqp.SQJsonMessageConverter"/>
+	<rabbit:template id="rabbitTemplateConverter" connection-factory="connectionFactory" message-converter="messageConverter"/>
+
+</beans>
