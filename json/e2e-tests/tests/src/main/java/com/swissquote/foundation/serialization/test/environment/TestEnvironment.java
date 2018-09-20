@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 @Value
 public class TestEnvironment {
 
-	private final TransactionNotificationAmqpListener notificationAmqpListener = new TransactionNotificationAmqpListener();
 	private final EndToEndTestRuntime runtime;
 	private final ExampleResource exampleResource;
 
@@ -33,6 +32,5 @@ public class TestEnvironment {
 
 	public void reset() {
 		log.info("Reset notifications");
-		notificationAmqpListener.clear();
 	}
 }

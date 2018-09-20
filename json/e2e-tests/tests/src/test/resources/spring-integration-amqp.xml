@@ -8,8 +8,8 @@
 			http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
 			http://www.springframework.org/schema/integration/amqp http://www.springframework.org/schema/integration/amqp/spring-integration-amqp.xsd
 		">
-
-	<import resource="classpath:/rmq-config.xml"/>
+	
+	<import resource="classpath:/spring-rabbit.xml"/>
 
 	<int:publish-subscribe-channel id="internal-outbound-channel"/>
 	<int:channel id="internal-inbound-channel"/>
@@ -26,7 +26,7 @@
 					 channel="internal-outbound-channel-collection"/>
 	</int:payload-type-router>
 
-	<bean id="serviceActivator" class="com.swissquote.foundation.serialization.test.spring.RMQServiceActivator"/>
+	<bean id="messageHandler" class="com.swissquote.foundation.serialization.test.spring.RMQMessageHandler"/>
 
 	<!-- **************************** -->
 	<!-- test with object transformer -->
@@ -69,7 +69,7 @@
 	/>
 	<int:chain input-channel="internal-inbound-channel-complexData">
 		<int:json-to-object-transformer object-mapper="objectMapper"/>
-		<int:service-activator ref="serviceActivator" method="handleTransformer"/>
+		<int:service-activator ref="messageHandler" method="handle"/>
 	</int:chain>
 	<int-amqp:inbound-channel-adapter
 			channel="internal-inbound-channel-map"
@@ -80,7 +80,7 @@
 	/>
 	<int:chain input-channel="internal-inbound-channel-map">
 		<int:json-to-object-transformer object-mapper="objectMapper"/>
-		<int:service-activator ref="serviceActivator" method="handleTransformer"/>
+		<int:service-activator ref="messageHandler" method="handle"/>
 	</int:chain>
 	<int-amqp:inbound-channel-adapter
 			channel="internal-inbound-channel-collection"
@@ -91,7 +91,7 @@
 	/>
 	<int:chain input-channel="internal-inbound-channel-collection">
 		<int:json-to-object-transformer object-mapper="objectMapper"/>
-		<int:service-activator ref="serviceActivator" method="handleTransformer"/>
+		<int:service-activator ref="messageHandler" method="handle"/>
 	</int:chain>
 	<!-- end test -->
 	<!-- ******** -->
@@ -103,31 +103,31 @@
 			channel="internal-outbound-channel-complexData"
 			amqp-template="rabbitTemplateConverter"
 			exchange-name="global.tx"
-			routing-key="common.complex"
+			routing-key="common.integration.complex"
 	/>
 	<int-amqp:outbound-channel-adapter
 			channel="internal-outbound-channel-map"
 			amqp-template="rabbitTemplateConverter"
 			exchange-name="global.tx"
-			routing-key="common.map"
+			routing-key="common.integration.map"
 	/>
 	<int-amqp:outbound-channel-adapter
 			channel="internal-outbound-channel-collection"
 			amqp-template="rabbitTemplateConverter"
 			exchange-name="global.tx"
-			routing-key="common.collection"
+			routing-key="common.integration.collection"
 	/>
 
 	<!-- inbound -->
 	<int-amqp:inbound-channel-adapter
 			channel="internal-inbound-channel"
-			queue-names="common.q"
+			queue-names="common.integration.q"
 			connection-factory="connectionFactory"
 			concurrent-consumers="1"
 			acknowledge-mode="AUTO"
 			message-converter="messageConverter"
 	/>
-	<int:service-activator input-channel="internal-inbound-channel" ref="serviceActivator" method="handleTransformer"/>
+	<int:service-activator input-channel="internal-inbound-channel" ref="messageHandler" method="handle"/>
 	<!-- end test -->
 	<!-- ******** -->
 

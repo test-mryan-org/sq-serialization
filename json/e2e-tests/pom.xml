@@ -24,8 +24,8 @@
 
 	<modules>
 		<module>soa</module>
-		<module>tests</module>
 		<module>sandbox</module>
+		<module>tests</module>
 	</modules>
 
 </project>

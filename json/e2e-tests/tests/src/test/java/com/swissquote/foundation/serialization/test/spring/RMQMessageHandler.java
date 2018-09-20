@@ -13,7 +13,7 @@ import com.swissquote.foundation.serialization.api.v1.entities.ComplexData;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class RMQServiceActivator {
+public class RMQMessageHandler {
 
 	private static final int QUEUE_SIZE = 5;
 	private static final int QUEUE_WAIT_TIME = 5;
@@ -49,7 +49,7 @@ public class RMQServiceActivator {
 		return queueContent;
 	}
 
-	public void handleTransformer(Object object) {
+	public void handle(Object object) {
 		if (object instanceof ComplexData) {
 			complexDataQueue.add((ComplexData) object);
 		} else if (object instanceof Map) {
