@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:int="http://www.springframework.org/schema/integration"
+	   xmlns:int-amqp="http://www.springframework.org/schema/integration/amqp"
+	   xsi:schemaLocation="
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+			http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
+			http://www.springframework.org/schema/integration/amqp http://www.springframework.org/schema/integration/amqp/spring-integration-amqp.xsd
+		">
+	
+	<import resource="classpath:/spring-rabbit.xml"/>
+
+	<int:channel id="mix-outbound-channel"/>
+	<int:channel id="all-outbound-channel"/>
+	<int:channel id="mix-inbound-channel"/>
+	<int:channel id="all-inbound-channel"/>
+
+	<bean id="messageHandler" class="com.swissquote.foundation.serialization.test.spring.RMQMessageHandler"/>
+	<bean id="objectMapper"
+		  class="com.swissquote.foundation.serialization.json.support.spring.integration.SQJsonObjectMapper"/>
+
+	<!-- **************************** -->
+	<!-- test mixing transformer and converter -->
+	<!-- outbound -->
+	<int:chain input-channel="mix-outbound-channel">
+		<int:object-to-json-transformer object-mapper="objectMapper"/>
+		<int-amqp:outbound-channel-adapter
+				amqp-template="rabbitTemplateTransformer"
+				exchange-name="global.tx"
+				routing-key="common.mix"
+		/>
+	</int:chain>
+
+	<!-- inbound -->
+	<int-amqp:inbound-channel-adapter
+			channel="mix-inbound-channel"
+			queue-names="common.mix.q"
+			connection-factory="connectionFactory"
+			concurrent-consumers="1"
+			acknowledge-mode="AUTO"
+			message-converter="messageConverter"
+	/>
+	<int:service-activator input-channel="mix-inbound-channel" ref="messageHandler" method="handle"/>
+	<!-- end test -->
+	<!-- ******** -->
+
+	<!-- **************************** -->
+	<!-- test all in one -->
+	<!--<bean id="objectMapperGson"-->
+		  <!--class="com.swissquote.foundation.serialization.json.GsonJsonObjectMapper"/>-->
+	<!---->
+	<!--&lt;!&ndash; outbound &ndash;&gt;-->
+	<!--<int:chain input-channel="all-outbound-channel">-->
+		<!--<int:object-to-json-transformer object-mapper="objectMapperGson"/>-->
+		<!--<int-amqp:outbound-channel-adapter-->
+				<!--amqp-template="rabbitTemplateTransformer"-->
+				<!--exchange-name="global.tx"-->
+				<!--routing-key="common.all"-->
+		<!--/>-->
+	<!--</int:chain>-->
+	<!---->
+	<!--&lt;!&ndash; inbound &ndash;&gt;-->
+	<!--<int-amqp:inbound-channel-adapter-->
+			<!--channel="all-inbound-channel"-->
+			<!--queue-names="common.all.q"-->
+			<!--connection-factory="connectionFactory"-->
+			<!--concurrent-consumers="1"-->
+			<!--acknowledge-mode="AUTO"-->
+			<!--message-converter="messageConverter"-->
+	<!--/>-->
+	<!--<int:service-activator input-channel="all-inbound-channel" ref="messageHandler" method="handle"/>-->
+	<!-- end test -->
+	<!-- ******** -->
+
+</beans>

@@ -13,6 +13,10 @@ import com.swissquote.foundation.serialization.api.v1.entities.ComplexValue;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * By replacing sq-serialization-json-jackson by sq-serialization-json-gson in the pom,
+ * we can test it works with gson
+ */
 @Slf4j
 public class SOASimpleTest extends AbstractTest {
 

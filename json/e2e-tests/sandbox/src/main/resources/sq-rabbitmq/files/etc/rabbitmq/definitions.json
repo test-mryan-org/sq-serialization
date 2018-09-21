@@ -9,7 +9,7 @@
   ],
   "permissions": [
     { "user": "guest", "vhost": "foundation", "configure": ".*", "write": ".*", "read": ".*"},
-    { "user": "example", "vhost": "foundation", "configure": "", "write": "global.tx", "read": "complex.q,collection.q,map.q,common.integration.q,common.spring.q"}
+    { "user": "example", "vhost": "foundation", "configure": "", "write": "global.tx", "read": "complex.q,collection.q,map.q,common.integration.q,common.spring.q,common.mix.q,common.all.q"}
   ],
   "exchanges": [
     { "name": "global.tx", "vhost": "foundation", "type": "topic", "durable": true, "auto_delete": false, "arguments": {}}
@@ -19,13 +19,17 @@
     { "name": "collection.q", "vhost": "foundation", "durable": true, "auto_delete": false, "arguments": {"x-message-ttl": 3600000}},
     { "name": "map.q", "vhost": "foundation", "durable": true, "auto_delete": false, "arguments": {"x-message-ttl": 3600000}},
     { "name": "common.integration.q", "vhost": "foundation", "durable": true, "auto_delete": false, "arguments": {"x-message-ttl": 3600000}},
-    { "name": "common.spring.q", "vhost": "foundation", "durable": true, "auto_delete": false, "arguments": {"x-message-ttl": 3600000}}
+    { "name": "common.spring.q", "vhost": "foundation", "durable": true, "auto_delete": false, "arguments": {"x-message-ttl": 3600000}},
+    { "name": "common.mix.q", "vhost": "foundation", "durable": true, "auto_delete": false, "arguments": {"x-message-ttl": 3600000}},
+    { "name": "common.all.q", "vhost": "foundation", "durable": true, "auto_delete": false, "arguments": {"x-message-ttl": 3600000}}
   ],
   "bindings": [
     { "source": "global.tx", "vhost": "foundation", "destination": "complex.q", "destination_type": "queue", "routing_key": "complex.#", "arguments": {}},
     { "source": "global.tx", "vhost": "foundation", "destination": "collection.q", "destination_type": "queue", "routing_key": "collection.#", "arguments": {}},
     { "source": "global.tx", "vhost": "foundation", "destination": "map.q", "destination_type": "queue", "routing_key": "map.#", "arguments": {}},
     { "source": "global.tx", "vhost": "foundation", "destination": "common.integration.q", "destination_type": "queue", "routing_key": "common.integration.#", "arguments": {}},
-    { "source": "global.tx", "vhost": "foundation", "destination": "common.spring.q", "destination_type": "queue", "routing_key": "common.spring.#", "arguments": {}}
+    { "source": "global.tx", "vhost": "foundation", "destination": "common.spring.q", "destination_type": "queue", "routing_key": "common.spring.#", "arguments": {}},
+    { "source": "global.tx", "vhost": "foundation", "destination": "common.mix.q", "destination_type": "queue", "routing_key": "common.mix.#", "arguments": {}},
+    { "source": "global.tx", "vhost": "foundation", "destination": "common.all.q", "destination_type": "queue", "routing_key": "common.all.#", "arguments": {}}
   ]
 }

@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:/spring-integration-amqp.xml"})
+@ContextConfiguration(locations = {"classpath:/spring-integration-amqp.xml","classpath:/spring-mix-amqp.xml"})
 public abstract class AbstractTest {
 
 	static final Duration TIMEOUT = new Duration(30, TimeUnit.SECONDS);
