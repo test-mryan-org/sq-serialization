@@ -21,9 +21,9 @@
 	</properties>
 
 	<scm>
-		<connection>scm:hg:https://mercurial.bank.swissquote.ch/hg/foundation/sq-serialization/</connection>
-		<developerConnection>scm:hg:https://mercurial.bank.swissquote.ch/hg/foundation/sq-serialization/</developerConnection>
-		<url>https://mercurial.bank.swissquote.ch/hg/foundation/sq-serialization/</url>
+		<connection>scm:hg:https://github.com/test-mryan-org/sq-serialization/</connection>
+		<developerConnection>scm:hg:https://github.com/test-mryan-org/sq-serialization/</developerConnection>
+		<url>https://github.com/test-mryan-org/sq-serialization/</url>
 		<tag>HEAD</tag>
 	</scm>
 
